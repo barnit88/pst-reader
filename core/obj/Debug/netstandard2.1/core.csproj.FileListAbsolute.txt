@@ -1,0 +1,9 @@
+C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\core\bin\Debug\netstandard2.1\core.deps.json
+C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\core\bin\Debug\netstandard2.1\core.dll
+C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\core\bin\Debug\netstandard2.1\core.pdb
+C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\core\obj\Debug\netstandard2.1\core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\core\obj\Debug\netstandard2.1\core.AssemblyInfoInputs.cache
+C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\core\obj\Debug\netstandard2.1\core.AssemblyInfo.cs
+C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\core\obj\Debug\netstandard2.1\core.csproj.CoreCompileInputs.cache
+C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\core\obj\Debug\netstandard2.1\core.dll
+C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\core\obj\Debug\netstandard2.1\core.pdb
