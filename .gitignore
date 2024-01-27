@@ -1,2 +1,5 @@
 /.vs/*
-/core/obj/*
+core/obj/
+core/bin/
+pst-extract/bin/
+pst-extract/obj/
