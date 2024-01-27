@@ -1,0 +1,17 @@
+﻿Single-Block Configuration
+The single-block HN consists of a single data block with an HNHDR header structure and an 
+HNPAGEMAP trailer structure at the end. The diagram in section 2.3.1.6 also shows how all the items 
+allocated from the heap are located in the space between the HNHDR and the HNPAGEMAP
+structures.
+
+Data Tree Configuration
+In the case of the multi-block HN, a data tree is used to fan out into multiple data blocks. An 
+XXBLOCK is used if the HN exceeds the capacity of an XBLOCK, but the maximum number of blocks 
+is 2 to the 16th power because of the 16-bit capacity of hidBlockIndex (section 2.3.1.1). The first 
+data block is identical to the single-block case. Because the HNHDR has eight Fill Level Map slots, the 
+next seven blocks only have the abbreviated HNPAGEHDR header structure. The eighth block, 
+however, only has an HNBITMAPHDR header structure because a new Fill Level Map is needed. 
+Because HNBITMAPHDR has 128 slots, it is only required once every 128 blocks thereafter. All the 
+blocks in-between have the HNPAGEHDR header instead.
+In terms of data arrangement, the data tree case is an extension to the single-block case, where 
+individual heap items are allocated from the leaf data blocks in a similar manner.
