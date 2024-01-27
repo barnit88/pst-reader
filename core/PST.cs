@@ -1,7 +1,7 @@
-﻿using Core.PST.Headers;
-using Core.PST.Pages.Base;
-using Core.PST.Pages.BTree;
-using Core.PST.Pages.Unicode;
+﻿using core.NDB.Headers;
+using core.NDB.Pages.Base;
+using core.NDB.Pages.BTree;
+using core.NDB.Pages.Unicode;
 using System.IO.MemoryMappedFiles;
 
 namespace Core.PST

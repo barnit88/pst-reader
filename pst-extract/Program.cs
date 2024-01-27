@@ -1,5 +1,4 @@
 ﻿using Core.PST;
-using Core.PST.Headers;
 using System.IO.MemoryMappedFiles;
 
 namespace PSTExtractor;
