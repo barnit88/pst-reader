@@ -15,7 +15,7 @@ class Program
 {
     public static void Main(string[] args)
     {
-        string path = "C:\\Users\\Barnit.Basnet\\source\\repos\\PersonalPSTExtractor\\source.pst";
+        string path = "C:\\Users\\Dell\\Workstation\\SoftwareDevelopment\\Dotnet\\NugetLibraries\\Personal\\PSTExtractionLibrary\\sample-pst\\source.pst";
         using (var memoryMappedFile = MemoryMappedFile.CreateFromFile(path, FileMode.Open))
         {
             var pst = new PST(memoryMappedFile);
