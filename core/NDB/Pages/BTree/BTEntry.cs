@@ -1,5 +1,7 @@
 ﻿using core.NDB.BREF;
+using core.NDB.Headers.Unicode;
 using System;
+using System.IO.MemoryMappedFiles;
 
 namespace core.NDB.Pages.BTree
 {
@@ -9,7 +11,10 @@ namespace core.NDB.Pages.BTree
     /// </summary>
     public class BTEntry : IBTPageEntry
     {
-
+        /// <summary>
+        /// A BTree entry record is an intermediate node that contains a child BTPage
+        /// </summary>
+        public BTreePage bTreePage { get; set; }
 
         /// <summary>
         /// 
@@ -21,14 +26,13 @@ namespace core.NDB.Pages.BTree
         /// 
         /// </summary>
         public BTreeEntryType BTreeEntryType { get; set; }
-
         /// <summary>
         /// BREF(Unicode: 16 bytes; ANSI: 8 bytes): 
         /// BREF structure that points to the child BTPAGE.
         /// </summary>
         public Bref Bref { get; set; }
 
-        #region 
+        #region Flags
         /// <summary>
         /// btkey (Unicode: 8 bytes; ANSI: 4 bytes): The key value associated with this BTENTRY. All the 
         /// entries in the child BTPAGE referenced by BREF have key values greater than or equal to this key
@@ -43,8 +47,17 @@ namespace core.NDB.Pages.BTree
         public byte[] BREF = new byte[16];
         #endregion 
 
-        public BTEntry(BTreeType bTreeType)
+        public BTEntry(MemoryMappedFile mmf,byte[] btentryBytes, BTreeEntryType bTreeEntryType)
         {
+            this.BTreeEntryType = bTreeEntryType;
+            this.btkey = BitConverter.ToUInt64(btentryBytes, 0);
+            byte[] brefData = new byte[16];
+            Array.Copy(btentryBytes, 8, brefData, 0, 16);
+            this.Bref = new UnicodeBREF(brefData);
+            if(bTreeEntryType == BTreeEntryType.NBTreeEntry)
+                this.bTreePage = new BTreePage(mmf, Bref,BTreeType.NBT);
+            else if (bTreeEntryType == BTreeEntryType.BBTreeEntry)
+                this.bTreePage = new BTreePage(mmf, Bref, BTreeType.BBT);
         }
     }
 }

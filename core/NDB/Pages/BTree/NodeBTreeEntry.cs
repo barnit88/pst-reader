@@ -1,4 +1,5 @@
-﻿using System;
+﻿using core.NDB.ID;
+using System;
 
 namespace core.NDB.Pages.BTree
 {
@@ -10,6 +11,12 @@ namespace core.NDB.Pages.BTree
     public class NodeBTreeEntry : IBTPageEntry
     {
 
+        public Nid Nid { get; set; }
+        public Bid Bid { get; set; }
+        public Bid BidSubNode { get; set; }
+        public SpecialInternalNID SpecialInternalNID { get; set; }
+        public NidType NidType { get; set; }
+        #region Flags
         /// <summary>
         /// nid (Unicode: 8 bytes; ANSI: 4 bytes): The NID (section 2.2.2.1) of the entry. Note that the NID is a 4-byte value for both Unicode and ANSI formats.However, to stay consistent with the size of
         /// the btkey member in BTENTRY, the 4-byte NID is extended to its 8-byte equivalent for Unicode
@@ -48,8 +55,27 @@ namespace core.NDB.Pages.BTree
         /// 
         /// </summary>
         public UInt32 nidParent;
+        /// <summary>
+        /// dwPadding (Unicode file format only, 4 bytes): Padding; MUST be set to zero.
+        /// </summary>
+        public UInt32 dwPadding;
+        #endregion
+        public NodeBTreeEntry(byte[] nodeBTreeDataBytes)
+        {
+            this.nid = BitConverter.ToUInt64(nodeBTreeDataBytes, 0);
+            this.SpecialInternalNID = (SpecialInternalNID)nid;
+            this.NidType = (NidType)(nid & 0x1f);//Lowest five bits
+            this.bidData = BitConverter.ToUInt64(nodeBTreeDataBytes, 8);
+            this.bidSub = BitConverter.ToUInt64(nodeBTreeDataBytes, 16);
+            this.nidParent = BitConverter.ToUInt32(nodeBTreeDataBytes, 24);
+            this.dwPadding = 0;
+            this.Nid = new Nid(nid);
+            this.Bid = new Bid(bidData);
+            Console.WriteLine("NID is: " + this.NidType.ToString());
+            Console.WriteLine("Special Internal NID is: " + this.SpecialInternalNID.ToString());
+            Console.WriteLine("------------------------------------------------------");
 
-        
-
+            this.BidSubNode = new Bid(bidSub);
+        }
     }
 }

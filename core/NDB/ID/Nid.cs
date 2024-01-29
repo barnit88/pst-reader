@@ -1,10 +1,40 @@
-﻿using System;
-using System.Collections;
-
-namespace core.NDB.ID
+﻿namespace core.NDB.ID
 {
     public class Nid
     {
+        /// <summary>
+        /// Special Internal NIDs
+        /// 
+        /// This section focuses on a special NID_TYPE: NID_TYPE_INTERNAL (0x01). As specified in section 
+        /// 2.2.2.1, the nidType of an NID is ignored by the NDB Layer, and is left for the interpretation by
+        /// higher level implementations. 
+        /// In the Messaging layer, nodes with various nidType values are also used to build related structures
+        /// that collectively represent complex structures (for example, a Folder object is a composite object 
+        /// that consists of a PC and three TCs of various nidType values). In addition, the Messaging layer also
+        /// uses NID_TYPE_INTERNAL to define special NIDs that have special functions.
+        /// Because top-level NIDs are globally-unique within a PST, it follows that each instance of a special NID
+        /// can only appear once in a PST. The following table lists all predefined internal NIDs.
+        ///     
+        ///     Special Internal NID's table
+        ///     Value  |  Friendly name                     |  Meaning
+        ///     0x21   |  NID_MESSAGE_STORE                 |  Message store node(section 2.4.3).
+        ///     0x61   |  NID_NAME_TO_ID_MAP                |  Named Properties Map(section 2.4.7).
+        ///     0xA1   |  NID_NORMAL_FOLDER_TEMPLATE        |  Special template node for an empty Folder object.
+        ///     0xC1   |  NID_SEARCH_FOLDER_TEMPLATE        |  Special template node for an empty search Folder object.
+        ///     0x122  |  NID_ROOT_FOLDER                   |  Root Mailbox Folder object of PST.
+        ///     0x1E1  |  NID_SEARCH_MANAGEMENT_QUEUE       |  Queue of Pending Search-related updates.
+        ///     0x201  |  NID_SEARCH_ACTIVITY_LIST          |  Folder object NIDs with active Search activity.
+        ///     0x241  |  NID_RESERVED1                     |  Reserved.
+        ///     0x261  |  NID_SEARCH_DOMAIN_OBJECT          |  Global list of all Folder objects that are referenced by any Folder object's Search Criteria.
+        ///     0x281  |  NID_SEARCH_GATHERER_QUEUE         |  Search Gatherer Queue (section 2.4.8.5.1).
+        ///     0x2A1  |  NID_SEARCH_GATHERER_DESCRIPTOR    |  Search Gatherer Descriptor(section 2.4.8.5.2).
+        ///     0x2E1  |  NID_RESERVED2                     |  Reserved.
+        ///     0x301  |  NID_RESERVED3                     |  Reserved.
+        ///     0x321  |  NID_SEARCH_GATHERER_FOLDER_QUEUE  |  Search Gatherer Folder Queue (section 2.4.8.5.3)
+        ///     
+        /// 
+        /// </summary>
+        public SpecialInternalNID SpecialInternalNID { get; set; }
         /// <summary>
         /// Nid Type specifies what type of node it is.
         /// Identifies the type of the node represented by the NID.
@@ -40,45 +70,41 @@ namespace core.NDB.ID
         /// it is worth noting that nidType has no meaning to the 
         /// structures defined in the NDB Layer.
         /// </summary>
-        BitArray nidType = new BitArray(5);
+        ulong nidType;
         /// <summary>
         /// nidIndex (27 bits): The identification portion of the NID.
         /// </summary>
-        BitArray nidIndex = new BitArray(27);
+        ulong nidIndex;
         public Nid(ulong nid)
         {
-            uint calculatedNid = CalculateNID(nid);
-            var arr = new BitArray(BitConverter.GetBytes(calculatedNid));
-            for (int i = 0; i < arr.Length; i++)
-            {
-                if (i < 5)
-                    nidType[i] = arr[i];
-                else
-                    nidIndex[i - 5] = arr[i];
-            }
+            this.nidType = nid & 0x1f;
+            this.nidIndex = nid >> 5;
+            this.NidType = (NidType)(nid & 0x1f);//Lowest five bits
 
         }
-        public uint CalculateNID(ulong btkey)
-        {
-            // Assuming Unicode PST and little-endian system
-            uint nid = (uint)(btkey & 0xFFFFFFFF); // Extract lower 32 bits
+        //public uint CalculateNID(ulong btkey)
+        //{
 
-            //// Extract nidType and check validity
-            //byte nidType = (byte)((nid >> 27) & 0x1F);
-            return nid;
-        }
-        public NidType GetNidTypey(BitArray bits)
-        {
-            byte result = 0;
+            
+        //    // Assuming Unicode PST and little-endian system
+        //    uint nid = (uint)(btkey & 0xFFFFFFFF); // Extract lower 32 bits
 
-            for (int i = 0; i < bits.Length; i++)
-            {
-                if (bits[i])
-                {
-                    result += (byte)(1 << i); // Multiply bit by 2^i and add to result
-                }
-            }
-            return (NidType)result;
-        }
+        //    //// Extract nidType and check validity
+        //    //byte nidType = (byte)((nid >> 27) & 0x1F);
+        //    return nid;
+        //}
+        //public NidType GetNidTypey(BitArray bits)
+        //{
+        //    byte result = 0;
+
+        //    for (int i = 0; i < bits.Length; i++)
+        //    {
+        //        if (bits[i])
+        //        {
+        //            result += (byte)(1 << i); // Multiply bit by 2^i and add to result
+        //        }
+        //    }
+        //    return (NidType)result;
+        //}
     }
 }

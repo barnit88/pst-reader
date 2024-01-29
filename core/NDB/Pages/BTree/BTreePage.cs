@@ -1,9 +1,18 @@
-﻿using core.NDB.Pages.Base;
+﻿using core.NDB.BREF;
+using core.NDB.Pages.Base;
 using System.Collections.Generic;
+using System.IO.MemoryMappedFiles;
 
 namespace core.NDB.Pages.BTree
 {
     /// <summary>
+    ///
+    /// A page is a fixed-size structure of 512 bytes that is used in the NDB Layer 
+    /// to represent allocation metadata and BTree data structures.
+    /// A page trailer is placed at the very end of every page such that
+    /// the end of the page trailer is aligned with the end of the page.
+    /// 
+    /// A PAGE has size of 512-bytes. 
     /// BTrees are widely used throughout the PST file format. 
     /// In the NDB Layer, BTrees are the building blocks for the NBT and BBT, 
     /// which are used to quickly navigate and search nodes and blocks.The PST
@@ -20,7 +29,6 @@ namespace core.NDB.Pages.BTree
         /// Type of BTree NodeBTree(NBT) or BlockBTree(BBT)
         /// </summary>
         public BTreeType BTreeType { get; set; }
-        
         /// <summary>
         /// Lists all the BTPageEntries. This BTPageEntries can be 
         /// - BTEntry
@@ -34,7 +42,16 @@ namespace core.NDB.Pages.BTree
         ///     is an BlockBTree child node.
         /// </summary>
         public List<IBTPageEntry> BTPageEntries { get; set; }
-
+        /// <summary>
+        /// 
+        ///     BTree Type | cLevel           |   rgentries structure   |  cbEnt(bytes)
+        ///     NBT        | 0                |   NBTENTRY              |  ANSI: 16, Unicode: 32 
+        ///                | Greater than 0   |   BTENTRY               |  ANSI: 12, Unicode: 24
+        ///     BBT        | 0                |   BBTENTRY              |  ANSI: 12, Unicode: 24
+        ///                | Less than 0      |   BTENTRY               |  ANSI: 12, Unicode: 24
+        /// 
+        /// </summary>
+        public BTreePageEntriesType BTreePageEntriesType { get; set; }
         #region Flags
         /// <summary>
         /// rgentries (Unicode: 488 bytes; ANSI: 496 bytes): Entries of the BTree array. 
@@ -87,10 +104,87 @@ namespace core.NDB.Pages.BTree
         /// </summary>
         protected byte[] pageTrailer;
         #endregion
-
-        public BTreePage(BTreeType bTreeType)
+        public BTreePage(MemoryMappedFile mmf, Bref bref, BTreeType bTreeType)
         {
             BTreeType = bTreeType;
+            using (MemoryMappedViewAccessor view =
+              mmf.CreateViewAccessor((long)bref.Ib, PageSize))
+            {
+                //InternalChildren = new List<BTreePage>();
+                rgentries = new byte[488];
+                view.ReadArray(0, rgentries, 0, 488);
+                cEnt = view.ReadByte(488);//Number of BTree Entries
+                cEntMax = view.ReadByte(489);//Maximum Number of BTree Entries that can fit inside the page
+                cbEnt = view.ReadByte(490);//Size of each BTree Entry
+                cLevel = view.ReadByte(491);//The depth level of this page
+                dwPadding = view.ReadInt32(492);
+                pageTrailer = new byte[16];
+                view.ReadArray(PageSize - 16, pageTrailer, 0, 16);
+                if(cLevel == 0)
+                {
+                    if(bTreeType == BTreeType.NBT)
+                        BTreePageEntriesType = BTreePageEntriesType.NBTENTRY;
+                    else if(bTreeType == BTreeType.BBT)
+                        BTreePageEntriesType = BTreePageEntriesType.BBTENTRY;
+                }
+                else
+                    BTreePageEntriesType = BTreePageEntriesType.BTENTRY;
+                PageTrailer = new PageTrailer(pageTrailerByte: pageTrailer, bref: bref);
+                ConfigureBTreeEntries(view, mmf, bTreeType);
+            }
+        }
+
+        private void ConfigureBTreeEntries(MemoryMappedViewAccessor view, MemoryMappedFile file, BTreeType bTreeType)
+        {
+            BTPageEntries = new List<IBTPageEntry>();
+            for (var i = 0; i < cEnt; i++)
+            {
+                byte[] curEntryBytes = new byte[cbEnt];
+                view.ReadArray(i * cbEnt, curEntryBytes, 0, cbEnt);
+                if (BTreePageEntriesType == BTreePageEntriesType.NBTENTRY)
+                    BTPageEntries.Add(new NodeBTreeEntry(curEntryBytes));
+                else if (BTreePageEntriesType == BTreePageEntriesType.BBTENTRY)
+                    BTPageEntries.Add(new BlockBTreeEntry(curEntryBytes));
+                else if(BTreePageEntriesType == BTreePageEntriesType.BTENTRY)
+                    BTPageEntries.Add(new BTEntry(file,curEntryBytes,
+                        bTreeType == BTreeType.NBT ? BTreeEntryType.NBTreeEntry : BTreeEntryType.BBTreeEntry));
+
+                //if (cLevel == 0)
+                //{
+                //    if (BTreeType == BTreeType.NBT)
+                //    {
+                //        BTPageEntries.Add(new UnicodeNodeBTreeEntry(curEntryBytes));
+                //    }
+                //    else
+                //    {
+                //        var curEntry = new UnicodeBlockBTreeEntry(curEntryBytes);
+                //        BTPageEntries.Add(curEntry);
+                //    }
+                //}
+                //else
+                //{
+                //    //btentries
+                //    var entry = new UnicodeBTreeEntry(curEntryBytes, BTreeType);
+                //    BTPageEntries.Add(entry);
+                //    using (var views = file.CreateViewAccessor((long)entry.Bref.Ib, 512))
+                //    {
+                //        var bytes = new byte[512];
+                //        view.ReadArray(0, bytes, 0, 512);
+                //        //InternalChildren.Add(new UnicodeBTreePage(file, entry.Bref, bTreeType));
+                //    }
+                //    //using (var view = pst.PSTMMF.CreateViewAccessor((long)entry.BREF.IB, 512))
+                //    //{
+                //    //    var bytes = new byte[512];
+                //    //    view.ReadArray(0, bytes, 0, 512);
+                //    //    this.InternalChildren.Add(new BTPage(bytes, entry.BREF, pst));
+                //    //}
+                //}
+            }
+        }
+        private void ConfigurecbEnt(byte cLevel)
+        {
+            if (cLevel == 0) { }
+
         }
     }
 }

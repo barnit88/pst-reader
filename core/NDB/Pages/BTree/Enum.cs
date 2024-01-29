@@ -2,6 +2,9 @@
 
 namespace core.NDB.Pages.BTree
 {
+    /// <summary>
+    /// Defines which type of the Page is current Page(NBT or BBT)
+    /// </summary>
     public enum BTreeType
     {
         [Description("Node BTree")]
@@ -9,6 +12,20 @@ namespace core.NDB.Pages.BTree
         [Description("Block BTree")]
         BBT
     }
+
+    /// <summary>
+    /// Defines which type of the BTEntry is current BTEntry
+    /// </summary>
+    public enum BTreeEntryType
+    {
+        [Description("Node BTree")]
+        NBTreeEntry,
+        [Description("Block BTree")]
+        BBTreeEntry
+    }
+
+
+
     /// <summary>
     /// cbEnt (1 byte)
     /// The size of each BTree entry, in bytes. Note that in some cases, cbEnt can be 
@@ -16,7 +33,7 @@ namespace core.NDB.Pages.BTree
     /// alignment or other considerations.Implementations MUST use the size specified in cbEnt to
     /// advance to the next entry.
     /// </summary>
-    public enum BTreeEntryType : byte
+    public enum BTreePageEntriesType : byte
     {
         /// <summary>
         /// BTENTRY (Intermediate Entries)
@@ -26,7 +43,7 @@ namespace core.NDB.Pages.BTree
         /// ANSI: 16, Unicode: 32
         /// </summary>
         [Description("Node BTree Entry")]
-        NBTENTRY = 32,
+        NBTENTRY,
         /// <summary>
         /// BBTENTRY (Leaf BBT Entry)
         /// 
@@ -38,7 +55,7 @@ namespace core.NDB.Pages.BTree
         /// ANSI: 12, Unicode: 24
         /// </summary>
         [Description("Block BTree Entry")]
-        BBTENTRY = 24,
+        BBTENTRY,
         /// <summary>
         /// NBTENTRY (Leaf NBT Entry)
         /// 
@@ -48,7 +65,7 @@ namespace core.NDB.Pages.BTree
         /// ANSI: 12, Unicode: 24
         /// </summary>
         [Description("BTree Entry")]
-        BTENTRY = 24
+        BTENTRY
     }
     /// <summary>
     /// cbEnt (1 byte)

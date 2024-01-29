@@ -1,11 +1,6 @@
-﻿using core.NDB.Blocks;
-using core.NDB.BREF;
-using core.NDB.ID;
-using Core.PST;
+﻿using core.NDB.BREF;
+using core.NDB.Headers.Unicode;
 using System;
-using System.Drawing;
-using System.Reflection.Emit;
-using System.Xml.Linq;
 
 namespace core.NDB.Pages.BTree
 {
@@ -63,7 +58,7 @@ namespace core.NDB.Pages.BTree
         /// BREF (Unicode: 16 bytes; ANSI: 8 bytes): BREF structure (section 2.2.2.4) that contains the BID 
         /// and IB of the block that the BBTENTRY references
         /// </summary>
-        public UInt64 BREF;
+        public byte[] BREF = new byte[64];
         /// <summary>
         /// cb (2 bytes): The count of bytes of the raw data contained in the block referenced by BREF
         /// excluding the block trailer and alignment padding, if any.
@@ -81,5 +76,14 @@ namespace core.NDB.Pages.BTree
         /// </summary>
         public UInt32 dwPadding;
         #endregion
+        public BlockBTreeEntry(byte[] blockBTreeDataBytes)
+        {
+            byte[] brefDataBytes = new byte[16];
+            Array.Copy(blockBTreeDataBytes, 0, brefDataBytes, 0, 16);
+            Bref = new UnicodeBREF(brefDataBytes);
+            cb = BitConverter.ToUInt16(blockBTreeDataBytes, 16);
+            cRef = BitConverter.ToUInt16(blockBTreeDataBytes, 18);
+            dwPadding = 0;
+        }
     }
 }
