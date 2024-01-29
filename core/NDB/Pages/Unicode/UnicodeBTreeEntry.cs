@@ -21,16 +21,7 @@ namespace core.NDB.Pages.Unicode
             byte[] brefData = new byte[16];
             Array.Copy(btentryBytes, 8, brefData, 0, 16);
             Bref = new UnicodeBREF(brefData);
-            if (BTreeType.NBT == bTreeType)
-            {
-                Nid = new Nid(btKey);
-                HasNid = true;
-            }
-            if (BTreeType.BBT == bTreeType)
-            {
-                Bid = new Bid(btKey);
-                HasBid = true;
-            }
+         
         }
 
     }

@@ -1,5 +1,4 @@
 ﻿using core.NDB.Pages.Base;
-using System;
 using System.Collections.Generic;
 
 namespace core.NDB.Pages.BTree
@@ -16,6 +15,12 @@ namespace core.NDB.Pages.BTree
     public class BTreePage : Page
     {
         public const string PageTypeName = "Block Tree Page(BTPage)";
+
+        /// <summary>
+        /// Type of BTree NodeBTree(NBT) or BlockBTree(BBT)
+        /// </summary>
+        public BTreeType BTreeType { get; set; }
+        
         /// <summary>
         /// Lists all the BTPageEntries. This BTPageEntries can be 
         /// - BTEntry
@@ -29,20 +34,8 @@ namespace core.NDB.Pages.BTree
         ///     is an BlockBTree child node.
         /// </summary>
         public List<IBTPageEntry> BTPageEntries { get; set; }
-        /// <summary>
-        /// Type of BTree NodeBTree(NBT) or BlockBTree(BBT)
-        /// </summary>
-        public BTreeType BTreeType { get; set; }
-        /// <summary>
-        /// 
-        ///     BTree Type | cLevel           |   rgentries structure   |  cbEnt(bytes)
-        ///     NBT        | 0                |   NBTENTRY              |  ANSI: 16, Unicode: 32 
-        ///                | Greater than 0   |   BTENTRY               |  ANSI: 12, Unicode: 24
-        ///     BBT        | 0                |   BBTENTRY              |  ANSI: 12, Unicode: 24
-        ///                | Less than 0      |   BTENTRY               |  ANSI: 12, Unicode: 24
-        /// 
-        /// </summary>
-        public BTreeEntryType BTreeEntryType { get; set; }
+
+        #region Flags
         /// <summary>
         /// rgentries (Unicode: 488 bytes; ANSI: 496 bytes): Entries of the BTree array. 
         /// The entries in the array depend on the value of the cLevel field.
@@ -93,6 +86,8 @@ namespace core.NDB.Pages.BTree
         /// ptypeNBT for a Node BTree page.
         /// </summary>
         protected byte[] pageTrailer;
+        #endregion
+
         public BTreePage(BTreeType bTreeType)
         {
             BTreeType = bTreeType;

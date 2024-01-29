@@ -9,6 +9,22 @@ namespace core.NDB.Pages.BTree
     /// </summary>
     public class NodeBTreeEntry : IBTPageEntry
     {
+
+        /// <summary>
+        /// nid (Unicode: 8 bytes; ANSI: 4 bytes): The NID (section 2.2.2.1) of the entry. Note that the NID is a 4-byte value for both Unicode and ANSI formats.However, to stay consistent with the size of
+        /// the btkey member in BTENTRY, the 4-byte NID is extended to its 8-byte equivalent for Unicode
+        /// PST files.
+        /// </summary>
+        public UInt64 nid;
+        /// <summary>
+        /// bidData (Unicode: 8 bytes; ANSI: 4 bytes): The BID of the data block for this node
+        /// </summary>
+        public UInt64 bidData;
+        /// <summary>
+        /// bidSub (Unicode: 8 bytes; ANSI: 4 bytes): The BID of the subnode block for this node. If this 
+        /// value is zero, a subnode block does not exist for this node.
+        /// </summary>
+        public UInt64 bidSub;
         /// <summary>
         /// nidParent (4 bytes): If this node represents a child of a Folder object defined 
         /// in the Messaging Layer, then this value is nonzero and contains 
@@ -31,7 +47,9 @@ namespace core.NDB.Pages.BTree
         /// for the Messaging layer.
         /// 
         /// </summary>
-        protected int nidParent { get; set; }
+        public UInt32 nidParent;
+
+        
 
     }
 }
