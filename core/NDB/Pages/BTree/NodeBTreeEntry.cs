@@ -71,6 +71,16 @@ namespace core.NDB.Pages.BTree
             this.dwPadding = 0;
             this.Nid = new Nid(nid);
             this.Bid = new Bid(bidData);
+            if(this.nid == 32802)
+            {
+                Console.WriteLine("NID is: FFUFSOSASDFASASDSA" + this.NidType.ToString());
+
+            }
+            if (this.nid == 32813)
+            {
+                Console.WriteLine("NID is: FFUFSOSASDFASASDSA" + this.NidType.ToString());
+
+            }
             Console.WriteLine("NID is: " + this.NidType.ToString());
             Console.WriteLine("Special Internal NID is: " + this.SpecialInternalNID.ToString());
             Console.WriteLine("------------------------------------------------------");

@@ -1,11 +1,28 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using static System.Collections.Specialized.BitVector32;
-using System.Xml.Linq;
+﻿using System.ComponentModel;
 
 namespace core.NDB.ID
 {
-
+    /// <summary>
+    /// MUST set to 1 when the block is "Internal", or zero when the block is not "Internal". An 
+    /// internal block is an intermediate block that, instead of containing actual data, contains metadata
+    /// about how to locate other data blocks that contain the desired information.For more details about
+    /// technical details regarding blocks, see section 2.2.2.8.
+    /// </summary>
+    public enum ExternalOrInternalBid 
+    {
+        /// <summary>
+        /// 2nd least significant bit of Bid(indicated by Bi) must be 1 when the block is internal. An 
+        /// internal block is an intermediate block that, instead of containing actual data, 
+        /// contains metadata about how to locate other data blocks 
+        /// that contain the desired information.
+        /// </summary>
+        Internal,
+        /// <summary>
+        /// 2nd least significant bit of Bid(indicated by Bi) must be 0 when the block is External.
+        /// Contains the data(Data Block)
+        /// </summary>
+        External
+    }
     /// <summary>
     /// 
     ///     Value |  Friendly Name                   | Description

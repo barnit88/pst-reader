@@ -1,18 +1,23 @@
-﻿using System;
+﻿using core.NDB.ID;
+using System;
+using System.Collections.Generic;
 
 namespace core.NDB.Blocks
 {
     /// <summary>
+    /// XBLOCK
     /// The XXBLOCK further expands the data that is associated with a node by using an array of BIDs that 
     /// reference XBLOCKs.A BLOCKTRAILER is present at the end of an XXBLOCK, and the end of the
     /// BLOCKTRAILER MUST be aligned on a 64-byte boundary.
     /// </summary>
     public class XXBlock
     {
+        public List<Bid> XBlockBids { get; set; } = new List<Bid>();
+
         /// <summary>
         /// btype (1 byte): Block type; MUST be set to 0x01 to indicate an XBLOCK or XXBLOCK.
         /// </summary>
-        public byte bytpe { get; set; }
+        public byte btype { get; set; }
         /// <summary>
         /// cLevel (1 byte): MUST be set to 0x02 to indicate and XXBLOCK.
         /// </summary>
@@ -20,11 +25,11 @@ namespace core.NDB.Blocks
         /// <summary>
         /// cEnt (2 bytes): The count of BID entries in the XXBLOCK.
         /// </summary>
-        public ushort cEnt { get; set; }
+        public UInt16 cEnt { get; set; }
         /// <summary>
         /// lcbTotal (4 bytes): Total count of bytes of all the external data stored in XBLOCKs under this XXBLOCK.
         /// </summary>
-        public uint IcbTotal { get; set; }
+        public UInt32 IcbTotal { get; set; }
         /// <summary>
         /// rgbid(variable) : Array of BIDs that reference XBLOCKs.The size is equal to the number of entries
         /// indicated by cEnt multiplied by the size of a BID (8 bytes for Unicode PST files, 4 bytes for ANSI
@@ -42,5 +47,26 @@ namespace core.NDB.Blocks
         /// Block Trailer holds the metadata about the block
         /// </summary>
         public BlockTrailer BlockTrailer { get; set; }
+        public XXBlock(byte[] xxBlockBytes, byte[] xxblockTrailerDataBytes)
+        {
+            this.btype = xxBlockBytes[0];
+            this.cLevel = xxBlockBytes[1];
+            if (!(btype == 0x01 && cLevel == 0x01))
+                throw new Exception("XXBlock, btype and clevel match error");
+            this.cEnt = BitConverter.ToUInt16(xxBlockBytes,2);
+            this.IcbTotal = BitConverter.ToUInt32(xxBlockBytes, 4);
+            var rgbidLength = cEnt * 8;
+            this.rgbid = new byte[rgbidLength];
+            Array.Copy(xxBlockBytes, 8, rgbid, 0, rgbidLength);
+            for (int i = 1; i <= cEnt; i++)
+            {
+                int position = ((i - 1) * 8);
+                var tempBid = BitConverter.ToUInt64(this.rgbid, position);
+                this.XBlockBids.Add(new Bid(tempBid));
+            }
+            if (rgbid.Length != rgbidLength)
+                throw new Exception("XBlock , Something wrong in rgbid array");
+            this.BlockTrailer = new BlockTrailer(xxblockTrailerDataBytes);
+        }
     }
 }

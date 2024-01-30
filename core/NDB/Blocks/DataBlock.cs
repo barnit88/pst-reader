@@ -1,6 +1,9 @@
-﻿namespace core.NDB.Blocks
+﻿using System;
+
+namespace core.NDB.Blocks
 {
     /// <summary>
+    /// Data Blocks
     /// A Data Block can be called as who follows a Generic Block structure.
     /// This Block is the main block that holds the actual data.
     /// A data block is a block that is "External" (that is, not marked "Internal") and contains data streamed 
@@ -10,9 +13,9 @@
     public class DataBlock
     {
         /// <summary>
-        /// Size of the data is contained in the BBTreeEntry information
-        /// BBTreeEntry also contains the block BREF.
-        /// </summary>
+        /// data (variable): The value of this field SHOULD be treated as an opaque binary large object 
+        /// (BLOB) by the NDB Layer.The size of this field is indicated by the cb subfield of the 
+        /// blockTrailer field.        /// </summary>
         public byte[] data { get; set; }
         /// <summary>
         /// Blocks can be of any size in between 64bytes to 8192 bytes. And block should always be 
@@ -25,5 +28,12 @@
         /// Block Trailer holds the metadata about the block
         /// </summary>
         public BlockTrailer BlockTrailer { get; set; }
+        public DataBlock(byte[] dataBlockBytes, byte[] blockTrailerDataBytes)
+        {
+            this.data = dataBlockBytes;
+            this.BlockTrailer = new BlockTrailer(blockTrailerDataBytes);
+            if (data.Length != this.BlockTrailer.cb)
+                throw new Exception("Data Block. Data Size Mismatch ");
+        }
     }
 }

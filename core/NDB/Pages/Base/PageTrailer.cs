@@ -79,12 +79,12 @@ namespace core.NDB.Pages.Base
             PageType = (PageType)pageTrailerByte[0];
             if (pageTrailerByte.Length != 16)
                 throw new Exception("Page Trailer Byte Lenth Error");
-            ptype = pageTrailerByte[0];
-            PageType = (PageType)ptype;
-            ptypeRepeat = pageTrailerByte[1];
-            wSig = BitConverter.ToUInt16(pageTrailerByte, 2);
-            dwCRC = BitConverter.ToInt32(pageTrailerByte, 4);
-            bid = BitConverter.ToUInt64(pageTrailerByte, 8);
+            this.ptype = pageTrailerByte[0];
+            this.PageType = (PageType)ptype;
+            this.ptypeRepeat = pageTrailerByte[1];
+            this.wSig = BitConverter.ToUInt16(pageTrailerByte, 2);
+            this.dwCRC = BitConverter.ToInt32(pageTrailerByte, 4);
+            this.bid = BitConverter.ToUInt64(pageTrailerByte, 8);
             if (bid != ComputeBid(PageType, bref))
                 throw new Exception("Unicode Page Trailer Error. Bid Mismatch");
         }
@@ -112,15 +112,15 @@ namespace core.NDB.Pages.Base
             //else
             //    bid = (ulong)bref.BId;
             if ((byte)pageType == 0x82)//ptypeFMap
-                return bref.Ib;
+                return bref.ib;
             else if ((byte)pageType == 0x83)//ptypePMap
-                return bref.Ib;
+                return bref.ib;
             else if ((byte)pageType == 0x84)//ptypeAMap
-                return bref.Ib;
+                return bref.ib;
             else if ((byte)pageType == 0x85)//ptypeFPMap
-                return bref.Ib;
+                return bref.ib;
             else
-                return bref._bId;
+                return bref.bid;
         }
 
 

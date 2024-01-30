@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace core.NDB.Blocks
 {
@@ -17,6 +18,7 @@ namespace core.NDB.Blocks
     /// </summary>
     public class SIBlock
     {
+        public List<SIEntry> SIEntries { get; set; } = new List<SIEntry> ();
         /// <summary>
         /// btype (1 byte): Block type; MUST be set to 0x02.
         /// </summary>
@@ -49,6 +51,26 @@ namespace core.NDB.Blocks
         /// blockTrailer (ANSI: 12 bytes; Unicode: 16 bytes): A BLOCKTRAILER structure (section 
         /// </summary>
         public BlockTrailer blockTrailer { get; set; }
+        public SIBlock(byte[] siBlockBytes, byte[] siBlockTrailerDataBytes)
+        {
+            this.btype = siBlockBytes[0];
+            this.cLevel = siBlockBytes[1];
+            if (!(btype == 0x02 && cLevel == 0x01))
+                throw new Exception("SIBlock, btype and clevel match error");
+            this.cEnt = BitConverter.ToUInt16(siBlockBytes, 2);
+            this.dwPadding = 0;
+            var rgEntriesSize = cEnt * 16;
+            this.rgentries = new byte[rgEntriesSize];
+            Array.Copy(siBlockBytes, 8, this.rgentries, 0, rgEntriesSize);
+            for (int i = 1; i <= cEnt; i++)
+            {
+                byte[] temp = new byte[16];
+                int position = ((i - 1) * 16);
+                Array.Copy(this.rgentries, 0, temp, 0, 16);
+                this.SIEntries.Add(new SIEntry(temp));
+            }
+            this.blockTrailer = new BlockTrailer(siBlockTrailerDataBytes);
+        }
 
     }
 }

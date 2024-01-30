@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 
 namespace core.NDB.ID
 {
@@ -15,41 +14,53 @@ namespace core.NDB.ID
     /// </summary>
     public class Bid
     {
-        //ulong or uInt64
+        public ExternalOrInternalBid ExternalOrInternalBid { get; set; }
+        /// <summary>
+        /// Indentifies if the block is internal or external
+        /// </summary>
+        public bool IsInternal { get; set; }
+        /// <summary>
+        /// Actual BId value after making least significant bit 0;
+        /// </summary>
         public ulong BId { get; set; }//64 bit unsigned integer 0 to +value
         /// <summary>
+        /// A - r (1 bit)
         /// Reserved bit. Readers MUST ignore this bit and treat it as zero before looking up the
         /// BID from the BBT.Writers MUST set this bit to zero.
         /// </summary>
-        protected BitArray Ar { get; set; } = new BitArray(1);
+        public bool Ar { get; set; }
         /// <summary>
+        /// B - i (1 bit)
         /// MUST set to 1 when the block is "Internal", or zero when the block is not "Internal". An
         /// internal block is an intermediate block that, instead of containing actual data, contains metadata
         /// about how to locate other data blocks that contain the desired information.
         /// </summary>
-        protected BitArray Bi { get; set; } = new BitArray(1);
+        public bool Bi { get; set; }
         /// <summary>
+        /// bidIndex (Unicode: 62 bits; ANSI: 30 bits):
         /// A monotonically increasing value that uniquely
         /// identifies the BID within the PST file.bidIndex values are assigned based on the bidNextB value in
         /// the HEADER structure. The bidIndex increments by one each time a new BID
         /// is assigned.
         /// </summary>
-        protected BitArray bidIndex { get; set; } = new BitArray(62);
+        public ulong bidIndex { get; set; }
         public Bid(ulong bid)
         {
-            BitArray bitArray = new BitArray(BitConverter.GetBytes(bid));
-            int bitArrayLength = bitArray.Length;
-            for (int i = 0; i < bitArrayLength; i++)
-            {
-                if (i < bitArrayLength - 2)
-                    bidIndex[i] = bitArray[i];
-                else if (i == bitArrayLength - 2)
-                    Bi[0] = bitArray[i];
-                else
-                    Ar[0] = bitArray[i];
-            }
-            BId = ResetLeastSignificantBit(bid);
+            
+            this.BId = ResetLeastSignificantBit(bid);
+            this.Ar = false;
+            var bicalc = (this.BId & 0x02);//Taking 2nd most least significant bit
+            this.IsInternal = bicalc > 0;
+            this.bidIndex = (this.BId >> 2) & 0x3FFFFFFFFFFFFFFF;//Shifting and taking 62 bits
+            ExternalOrInternalBid = this.IsInternal ? 
+                    ExternalOrInternalBid.Internal : ExternalOrInternalBid.External;
+            Console.WriteLine("****************************************");
+            Console.WriteLine("Is Internal:- is 1 and External:- is 0 or not internal");
+            Console.WriteLine("Is Internal: " + this.ExternalOrInternalBid + " or " + this.IsInternal.ToString());
+            Console.WriteLine(this.BId);
+            Console.WriteLine("****************************************");
         }
+
         /// <summary>
         /// A - r (1 bit): Reserved bit. Readers MUST ignore this bit and 
         /// treat it as zero before looking up the BID from the BBT.

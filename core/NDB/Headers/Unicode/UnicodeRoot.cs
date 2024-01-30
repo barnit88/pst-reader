@@ -1,4 +1,5 @@
-﻿using System;
+﻿using core.NDB.BREF;
+using System;
 using System.IO.MemoryMappedFiles;
 
 namespace core.NDB.Headers.Unicode
@@ -13,13 +14,13 @@ namespace core.NDB.Headers.Unicode
         /// the root page of the Node BTree(NBT).
         /// Pointing to BTPage for Node
         /// </summary>
-        public UnicodeBREF NBTBREF { get; set; }
+        public Bref NBTBREF { get; set; }
         /// <summary>
         /// A BREF structure that references 
         /// the root page of the Block BTree(NBT).
         /// Pointing to BTPage for Block
         /// </summary>
-        public UnicodeBREF BBTBREF { get; set; }
+        public Bref BBTBREF { get; set; }
         /// <summary>
         /// dwReserved (4 bytes): Implementations SHOULD ignore this value and 
         /// SHOULD NOT modify it. 
@@ -91,10 +92,10 @@ namespace core.NDB.Headers.Unicode
             cbPMapFree = view.ReadInt64(currentOffset);
             currentOffset += 8;
             view.ReadArray(currentOffset, BREFNBT, 0, 16);
-            NBTBREF = new UnicodeBREF(BREFNBT);
+            NBTBREF = new Bref(BREFNBT);
             currentOffset += 16;
             view.ReadArray(currentOffset, BREFBBT, 0, 16);
-            BBTBREF = new UnicodeBREF(BREFBBT);
+            BBTBREF = new Bref(BREFBBT);
             currentOffset += 16;
             CheckfAMapValid(view, currentOffset);
             currentOffset += 1;

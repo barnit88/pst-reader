@@ -1,4 +1,6 @@
-﻿using System;
+﻿using core.NDB.ID;
+using System;
+using System.Collections.Generic;
 
 namespace core.NDB.Blocks
 {
@@ -14,6 +16,7 @@ namespace core.NDB.Blocks
     /// </summary>
     public class SLBlock
     {
+        public List<SLEntry> SLEntries { get; set; } = new List<SLEntry>();
         /// <summary>
         /// btype(1 byte) : Block type; MUST be set to 0x02.
         /// </summary>
@@ -48,5 +51,25 @@ namespace core.NDB.Blocks
         /// blockTrailer (ANSI: 12 bytes; Unicode: 16 bytes): A BLOCKTRAILER structure 
         /// </summary>
         public BlockTrailer blockTrailer { get; set; }
+        public SLBlock(byte[] slBlockBytes, byte[] slBlockTrailerDataBytes)
+        {
+            this.btype = slBlockBytes[0];
+            this.cLevel = slBlockBytes[1];
+            if (!(btype == 0x02 && cLevel == 0x00))
+                throw new Exception("SLBlock, btype and clevel match error");
+            this.cEnt = BitConverter.ToUInt16(slBlockBytes, 2);
+            this.dwPadding = 0;
+            var rgEntriesSize = cEnt * 24;
+            this.rgentries = new byte[rgEntriesSize];
+            Array.Copy(slBlockBytes, 8, this.rgentries, 0, rgEntriesSize);
+            for (int i = 1; i <= cEnt; i++)
+            {
+                byte[] temp = new byte[24];
+                int position = ((i - 1) * 24);
+                Array.Copy(this.rgentries, 0, temp, 0, 24);
+                this.SLEntries.Add(new SLEntry(temp));
+            }
+            this.blockTrailer = new BlockTrailer(slBlockTrailerDataBytes);
+        }
     }
 }

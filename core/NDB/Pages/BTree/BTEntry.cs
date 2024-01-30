@@ -53,7 +53,7 @@ namespace core.NDB.Pages.BTree
             this.btkey = BitConverter.ToUInt64(btentryBytes, 0);
             byte[] brefData = new byte[16];
             Array.Copy(btentryBytes, 8, brefData, 0, 16);
-            this.Bref = new UnicodeBREF(brefData);
+            this.Bref = new Bref(brefData);
             if(bTreeEntryType == BTreeEntryType.NBTreeEntry)
                 this.bTreePage = new BTreePage(mmf, Bref,BTreeType.NBT);
             else if (bTreeEntryType == BTreeEntryType.BBTreeEntry)

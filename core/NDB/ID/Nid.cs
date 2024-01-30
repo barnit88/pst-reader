@@ -1,4 +1,7 @@
-﻿namespace core.NDB.ID
+﻿using System;
+using System.Security.Authentication;
+
+namespace core.NDB.ID
 {
     public class Nid
     {
@@ -80,12 +83,11 @@
             this.nidType = nid & 0x1f;
             this.nidIndex = nid >> 5;
             this.NidType = (NidType)(nid & 0x1f);//Lowest five bits
-
         }
         //public uint CalculateNID(ulong btkey)
         //{
 
-            
+
         //    // Assuming Unicode PST and little-endian system
         //    uint nid = (uint)(btkey & 0xFFFFFFFF); // Extract lower 32 bits
 

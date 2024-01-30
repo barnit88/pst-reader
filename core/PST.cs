@@ -15,6 +15,7 @@ namespace Core.PST
             this.Header = new Header(file);
             if (this.Header.IsUnicode)
             {
+                //Reference to this NDB Layer Pages are stored in root of the header of the PST file
                 this.NodeBTPage =
                     new BTreePage(file, this.Header.UnicodeHeader.Root.NBTBREF, BTreeType.NBT);
 

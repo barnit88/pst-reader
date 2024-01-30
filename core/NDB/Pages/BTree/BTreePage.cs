@@ -108,7 +108,7 @@ namespace core.NDB.Pages.BTree
         {
             BTreeType = bTreeType;
             using (MemoryMappedViewAccessor view =
-              mmf.CreateViewAccessor((long)bref.Ib, PageSize))
+              mmf.CreateViewAccessor((long)bref.ib, PageSize))
             {
                 //InternalChildren = new List<BTreePage>();
                 rgentries = new byte[488];
@@ -144,41 +144,10 @@ namespace core.NDB.Pages.BTree
                 if (BTreePageEntriesType == BTreePageEntriesType.NBTENTRY)
                     BTPageEntries.Add(new NodeBTreeEntry(curEntryBytes));
                 else if (BTreePageEntriesType == BTreePageEntriesType.BBTENTRY)
-                    BTPageEntries.Add(new BlockBTreeEntry(curEntryBytes));
+                    BTPageEntries.Add(new BlockBTreeEntry(curEntryBytes, file));
                 else if(BTreePageEntriesType == BTreePageEntriesType.BTENTRY)
                     BTPageEntries.Add(new BTEntry(file,curEntryBytes,
                         bTreeType == BTreeType.NBT ? BTreeEntryType.NBTreeEntry : BTreeEntryType.BBTreeEntry));
-
-                //if (cLevel == 0)
-                //{
-                //    if (BTreeType == BTreeType.NBT)
-                //    {
-                //        BTPageEntries.Add(new UnicodeNodeBTreeEntry(curEntryBytes));
-                //    }
-                //    else
-                //    {
-                //        var curEntry = new UnicodeBlockBTreeEntry(curEntryBytes);
-                //        BTPageEntries.Add(curEntry);
-                //    }
-                //}
-                //else
-                //{
-                //    //btentries
-                //    var entry = new UnicodeBTreeEntry(curEntryBytes, BTreeType);
-                //    BTPageEntries.Add(entry);
-                //    using (var views = file.CreateViewAccessor((long)entry.Bref.Ib, 512))
-                //    {
-                //        var bytes = new byte[512];
-                //        view.ReadArray(0, bytes, 0, 512);
-                //        //InternalChildren.Add(new UnicodeBTreePage(file, entry.Bref, bTreeType));
-                //    }
-                //    //using (var view = pst.PSTMMF.CreateViewAccessor((long)entry.BREF.IB, 512))
-                //    //{
-                //    //    var bytes = new byte[512];
-                //    //    view.ReadArray(0, bytes, 0, 512);
-                //    //    this.InternalChildren.Add(new BTPage(bytes, entry.BREF, pst));
-                //    //}
-                //}
             }
         }
         private void ConfigurecbEnt(byte cLevel)
