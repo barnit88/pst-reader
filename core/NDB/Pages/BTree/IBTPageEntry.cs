@@ -2,5 +2,7 @@
 {
     public interface IBTPageEntry
     {
+
+        public BTreePageEntriesType BTreePageEntriesType { get; set; }
     }
 }

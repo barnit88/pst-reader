@@ -54,11 +54,11 @@ namespace core.NDB.ID
             this.bidIndex = (this.BId >> 2) & 0x3FFFFFFFFFFFFFFF;//Shifting and taking 62 bits
             ExternalOrInternalBid = this.IsInternal ? 
                     ExternalOrInternalBid.Internal : ExternalOrInternalBid.External;
-            Console.WriteLine("****************************************");
-            Console.WriteLine("Is Internal:- is 1 and External:- is 0 or not internal");
-            Console.WriteLine("Is Internal: " + this.ExternalOrInternalBid + " or " + this.IsInternal.ToString());
-            Console.WriteLine(this.BId);
-            Console.WriteLine("****************************************");
+            //Console.WriteLine("****************************************");
+            //Console.WriteLine("Is Internal:- is 1 and External:- is 0 or not internal");
+            //Console.WriteLine("Is Internal: " + this.ExternalOrInternalBid + " or " + this.IsInternal.ToString());
+            //Console.WriteLine(this.BId);
+            //Console.WriteLine("****************************************");
         }
 
         /// <summary>

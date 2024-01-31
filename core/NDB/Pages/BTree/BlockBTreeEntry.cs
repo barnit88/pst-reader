@@ -53,6 +53,7 @@ namespace core.NDB.Pages.BTree
     /// </summary>
     public class BlockBTreeEntry : IBTPageEntry
     {
+        public BTreePageEntriesType BTreePageEntriesType { get; set; } = BTreePageEntriesType.BBTENTRY;
         /// <summary>
         /// BREF(Unicode: 16 bytes; ANSI: 8 bytes): 
         /// BREF structure that points to the child BTPAGE.
@@ -76,6 +77,7 @@ namespace core.NDB.Pages.BTree
         /// data block(from 64 to 8192 bytes) minus the size of the trailer block.
         /// </summary>
         public Block Block { get; set; }
+
 
         #region Flags
         /// <summary>
@@ -110,12 +112,13 @@ namespace core.NDB.Pages.BTree
             this.cRef = BitConverter.ToUInt16(blockBTreeDataBytes, 18);
             this.dwPadding = 0;
             this.Block = new Block(file, Bref, this.cb);
-            //Console.WriteLine("Block Node BTree Entry Information");
-            //Console.WriteLine("Raw Data Count contained by this block: " + this.cb);
-            //Console.WriteLine("Raw BREF: " + this.BREF);
-            //Console.WriteLine("BREF Block Id: " + this.Bref._bId);
-            //Console.WriteLine("Bref Block ib(offset): " + this.Bref.Ib);
-            //Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            Console.WriteLine("Block BTree Entry Information");
+            Console.WriteLine("Raw BREF: " + this.BREF);
+            Console.WriteLine("BREF Block Id: " + this.Bref.bid);
+            Console.WriteLine("Bref Block ib(offset): " + this.Bref.ib);
+            Console.WriteLine("Raw Data Count contained by this block : " + this.cb);
+            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++");
         }
     }
 }

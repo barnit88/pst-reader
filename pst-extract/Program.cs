@@ -1,4 +1,5 @@
-﻿using Core.PST;
+﻿using core.Messaging;
+using Core.PST;
 using System.IO.MemoryMappedFiles;
 
 namespace PSTExtractor;
@@ -18,9 +19,8 @@ class Program
         using (var memoryMappedFile = MemoryMappedFile.CreateFromFile(path, FileMode.Open))
         {
             var pst = new PST(memoryMappedFile);
+            var message = new MessageStore(memoryMappedFile, pst);
         }
-
-        
     }
 }
 //There are more NID Types

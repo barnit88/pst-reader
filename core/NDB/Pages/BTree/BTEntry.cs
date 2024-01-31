@@ -11,6 +11,7 @@ namespace core.NDB.Pages.BTree
     /// </summary>
     public class BTEntry : IBTPageEntry
     {
+        public BTreePageEntriesType BTreePageEntriesType { get; set; } = BTreePageEntriesType.BTENTRY;
         /// <summary>
         /// A BTree entry record is an intermediate node that contains a child BTPage
         /// </summary>
@@ -49,6 +50,7 @@ namespace core.NDB.Pages.BTree
 
         public BTEntry(MemoryMappedFile mmf,byte[] btentryBytes, BTreeEntryType bTreeEntryType)
         {
+            Console.WriteLine("+_+_+_+_+_+_+_+_+_+_+_+_+BTree Entry+_+_+_+_+_+_+_+_+_+_+_+_+_+");
             this.BTreeEntryType = bTreeEntryType;
             this.btkey = BitConverter.ToUInt64(btentryBytes, 0);
             byte[] brefData = new byte[16];
@@ -58,6 +60,7 @@ namespace core.NDB.Pages.BTree
                 this.bTreePage = new BTreePage(mmf, Bref,BTreeType.NBT);
             else if (bTreeEntryType == BTreeEntryType.BBTreeEntry)
                 this.bTreePage = new BTreePage(mmf, Bref, BTreeType.BBT);
+            Console.WriteLine("+_+_+_+_+_+_+_+_+_+_+_+_+BTree Entry+_+_+_+_+_+_+_+_+_+_+_+_+_+");
         }
     }
 }
