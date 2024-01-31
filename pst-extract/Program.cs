@@ -1,6 +1,4 @@
-﻿using core.Messaging;
-using Core.PST;
-using System.IO.MemoryMappedFiles;
+﻿using XstReader;
 
 namespace PSTExtractor;
 //position : byte from where the reading will start
@@ -16,13 +14,115 @@ class Program
     public static void Main(string[] args)
     {
         string path = "C:\\Users\\Dell\\Workstation\\SoftwareDevelopment\\Dotnet\\NugetLibraries\\Personal\\PSTExtractionLibrary\\sample-pst\\source.pst";
-        using (var memoryMappedFile = MemoryMappedFile.CreateFromFile(path, FileMode.Open))
+        //using (var memoryMappedFile = MemoryMappedFile.CreateFromFile(path, FileMode.Open))
+        //{
+        //    var pst = new PST(memoryMappedFile);
+        //    var message = new MessageStore(pst,SpecialInternalNId.NID_MESSAGE_STORE);
+        //}
+        OpenOstOrPstFile(path);
+    }
+    
+    public static void OpenOstOrPstFile(string fileName)
+    {
+        // Note the "using": XstFile implements IDisposable
+        // The file remains opened until dispose of XstFile
+        using (var xstFile = new XstFile(fileName))
         {
-            var pst = new PST(memoryMappedFile);
-            var message = new MessageStore(memoryMappedFile, pst);
+            ProcessFolder(xstFile.RootFolder);
         }
     }
+
+    //#### Processing a Folder
+    public static void ProcessFolder(XstFolder folder)
+    {
+        // We can process the properties of the Folder
+        var properties = folder.Properties;
+
+        // Messages in the folder
+        foreach (var message in folder.Messages)
+        {
+            ProcessMessage(message);
+        }
+
+        // Folders inside the folder
+        foreach (var childFolder in folder.Folders)
+        {
+            ProcessFolder(childFolder);
+        }
+    }
+
+    //#### Processing a Message
+    public static void ProcessMessage(XstMessage message)
+    {
+        // We can process the properties of the Message
+        var properties = message.Properties;
+
+        // Recipients of the Message
+        ProcessRecipients(message.Recipients);
+
+        // Body of the Message
+        ProcessBody(message.Body);
+
+        // Attachments in the message
+        foreach (var attachment in message.Attachments)
+        {
+            ProcessAttachment(attachment);
+        }
+    }
+
+    //#### Processing Recipients
+
+    public static void ProcessRecipients(XstRecipientSet recipients)
+    {
+        // We have info about recipients involved in a Message:
+        XstRecipient originator = recipients.Originator;
+        XstRecipient originalSentRepresenting = recipients.OriginalSentRepresenting;
+        XstRecipient sentRepresenting = recipients.SentRepresenting;
+        XstRecipient sender = recipients.Sender;
+        IEnumerable<XstRecipient> to = recipients.To;
+        IEnumerable<XstRecipient> cc = recipients.Cc;
+        IEnumerable<XstRecipient> bcc = recipients.Bcc;
+        XstRecipient receivedBy = recipients.ReceivedBy;
+        XstRecipient receivedRepresenting = recipients.ReceivedRepresenting;
+
+        // All Recipients with its own properties:
+        var senderProperties = sender.Properties;
+    }
+
+    //#### Processing Body
+    public static void ProcessBody(XstMessageBody body)
+    {
+        switch (body.Format)
+        {
+            case XstMessageBodyFormat.Html:
+                Console.Write("body in html"); break;
+            case XstMessageBodyFormat.Rtf:
+                Console.Write("body in rtf"); break;
+            case XstMessageBodyFormat.PlainText:
+                Console.Write("body in txt"); break;
+        }
+
+        // The Body in the format can be accessed by text or bytearray
+        var text = body.Text;
+        var bytes = body.Bytes;
+    }
+    //#### Processing Attachment
+    public static void ProcessAttachment(XstAttachment attachment)
+    {
+        string fileName = "myAttachment";
+
+        // We can process the properties of the Attachment
+        var properties = attachment.Properties;
+
+        // We can open attached Messages
+        if (attachment.IsEmail)
+            ProcessMessage(attachment.AttachedEmailMessage);
+        // We can save attachments
+        else if (attachment.IsFile)
+            attachment.SaveToFile(fileName, attachment.LastModificationTime);
+    }
 }
+
 //There are more NID Types
 public enum rgnidType : int //(NID_TYPE)
 {

@@ -33,7 +33,7 @@ namespace core.Messaging
     ///        0x321  |  NID_SEARCH_GATHERER_FOLDER_QUEUE  |  Search Gatherer Folder Queue (section 2.4.8.5.3)
     /// 
     /// </summary>
-    internal enum SpecialInternalNId : UInt32
+    public enum SpecialInternalNId : UInt32
     {
         [Description("Message store node")]
         NID_MESSAGE_STORE = 0x21,

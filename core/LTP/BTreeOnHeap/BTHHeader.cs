@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace core.LTP.BTH
+namespace core.LTP.BTreeOnHeap
 {
     /// <summary>
     /// BTHHEADER

@@ -1,6 +1,7 @@
 ﻿using core.NDB.Headers;
 using core.NDB.Pages.BTree;
 using System;
+using System.Collections.Generic;
 using System.IO.MemoryMappedFiles;
 
 namespace Core.PST
@@ -25,15 +26,61 @@ namespace Core.PST
                     new BTreePage(file, this.Header.UnicodeHeader.Root.BBTBREF, BTreeType.BBT);
             }
         }
-        public void GetBidFromNid(int nid)
+        public NodeBTreeEntry GetNodeBTreeEntryFromNid(ulong nid, List<IBTPageEntry> nodeBTPageEntries)
         {
-            foreach(var item in this.NodeBTPage.BTPageEntries)
+            for (int i = 0; i < nodeBTPageEntries.Count; i++)
             {
-                //var 
+                var currentEntry = nodeBTPageEntries[i];
+                var nextEntry = nodeBTPageEntries[nodeBTPageEntries.Count == i + 1 ? i : i + 1];
+
+                if (currentEntry.BTreePageEntriesType == BTreePageEntriesType.BTENTRY)
+                {
+                    var currentBTPageEntry = (BTEntry)currentEntry;
+                    var nextBTPageEntry = (BTEntry)nextEntry;
+                    if (nid >= currentBTPageEntry.btkey && nid <= nextBTPageEntry.btkey)
+                        return GetNodeBTreeEntryFromNid(nid, currentBTPageEntry.bTreePage.BTPageEntries);
+                }
+                else if (currentEntry.BTreePageEntriesType == BTreePageEntriesType.NBTENTRY)
+                {
+                    var nodeBTPageEntry = (NodeBTreeEntry)currentEntry;
+                    if (nodeBTPageEntry.nid == nid)
+                        return nodeBTPageEntry;
+                }
+                else if (currentEntry.BTreePageEntriesType == BTreePageEntriesType.BBTENTRY)
+                    throw new Exception("GetNidFromBid | Unexpected BBTEntry ");
+                else
+                    throw new Exception("GetNidFromBid | BTPageEntryType error");
             }
-            var bTEntry = this.BlockBTPage.BTPageEntries[0] as BTEntry;
-            if (bTEntry.BTreeEntryType != BTreeEntryType.NBTreeEntry)
-                throw new Exception("Invalid Data from GetBidFromNid");
+            throw new Exception("GetNidFromBid | No any NodeBTree found for provided Nid");
+        }
+
+        public BlockBTreeEntry GetBlockBTreeEntryFromBid(ulong bid, List<IBTPageEntry> blockBTPageEntries,
+            bool valueFound = false)
+        {
+            for (int i = 0; i < blockBTPageEntries.Count; i++)
+            {
+                var currentEntry = blockBTPageEntries[i];
+                var nextEntry = blockBTPageEntries[blockBTPageEntries.Count == i + 1 ? i : i + 1];
+
+                if (currentEntry.BTreePageEntriesType == BTreePageEntriesType.BTENTRY)
+                {
+                    var currentBTPageEntry = (BTEntry)currentEntry;
+                    var nextBTPageEntry = (BTEntry)nextEntry;
+                    if (bid >= currentBTPageEntry.btkey && bid <= nextBTPageEntry.btkey)
+                        return GetBlockBTreeEntryFromBid(bid, currentBTPageEntry.bTreePage.BTPageEntries);
+                }
+                else if (currentEntry.BTreePageEntriesType == BTreePageEntriesType.BBTENTRY)
+                {
+                    var blockBTPageEntry = (BlockBTreeEntry)currentEntry;
+                    if (blockBTPageEntry.Bref.bid == bid)
+                        return blockBTPageEntry;
+                }
+                else if (currentEntry.BTreePageEntriesType == BTreePageEntriesType.NBTENTRY)
+                    throw new Exception("GetNidFromBid | Unexpected BBTEntry ");
+                else
+                    throw new Exception("GetNidFromBid | BTPageEntryType error");
+            }
+            throw new Exception("GetNidFromBid | No any NodeBTree found for provided Nid");
         }
     }
 }

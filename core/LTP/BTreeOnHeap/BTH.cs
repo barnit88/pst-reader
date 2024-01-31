@@ -1,4 +1,4 @@
-﻿namespace core.LTP.BTH
+﻿namespace core.LTP.BTreeOnHeap
 {
     /// <summary>
     /// A BTree-on-Heap implements a classic BTree on a heap node. A BTH consists of several parts: 

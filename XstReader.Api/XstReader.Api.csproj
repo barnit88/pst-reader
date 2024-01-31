@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>XstReader</RootNamespace>
+    <Version>1.0.7</Version>
+    <AssemblyVersion>1.0.7</AssemblyVersion>
+    <FileVersion>1.0.7</FileVersion>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>iluvadev</Authors>
+    <PackageProjectUrl>https://github.com/iluvadev/XstReader</PackageProjectUrl>
+    <Description>An open source library to read Microsoft Outlook’s .ost and .pst files (also those protected by unknown password), written entirely in C#, with no dependency on any Microsoft Office component. 
+Project site: https://github.com/iluvadev/XstReader
+
+Based on the great work of Dijji.
+Original project: https://github.com/dijji/XstReader</Description>
+    <Copyright>Copyright (c) 2016, Dijji; 2021, iluvadev, and released under Ms-PL License.</Copyright>
+    <RepositoryUrl>https://github.com/iluvadev/XstReader</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>outlook-files, pst-reader, ost-reader</PackageTags>
+    <PackageLicenseExpression>MS-PL</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <PackageReleaseNotes></PackageReleaseNotes>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ElementProperties\StandardProperties.cs" />
+    <Compile Remove="XstPropertySet - còpia.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
+</Project>

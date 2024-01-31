@@ -83,30 +83,7 @@ namespace core.NDB.ID
             this.nidType = nid & 0x1f;
             this.nidIndex = nid >> 5;
             this.NidType = (NidType)(nid & 0x1f);//Lowest five bits
+            this.SpecialInternalNID = (SpecialInternalNID)nid;
         }
-        //public uint CalculateNID(ulong btkey)
-        //{
-
-
-        //    // Assuming Unicode PST and little-endian system
-        //    uint nid = (uint)(btkey & 0xFFFFFFFF); // Extract lower 32 bits
-
-        //    //// Extract nidType and check validity
-        //    //byte nidType = (byte)((nid >> 27) & 0x1F);
-        //    return nid;
-        //}
-        //public NidType GetNidTypey(BitArray bits)
-        //{
-        //    byte result = 0;
-
-        //    for (int i = 0; i < bits.Length; i++)
-        //    {
-        //        if (bits[i])
-        //        {
-        //            result += (byte)(1 << i); // Multiply bit by 2^i and add to result
-        //        }
-        //    }
-        //    return (NidType)result;
-        //}
     }
 }

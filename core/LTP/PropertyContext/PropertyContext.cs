@@ -1,4 +1,6 @@
-﻿using System;
+﻿using core.LTP.BTreeOnHeap;
+using core.NDB.Pages.BTree;
+using System;
 
 namespace core.LTP.PropertyContext
 {
@@ -73,7 +75,7 @@ namespace core.LTP.PropertyContext
     /// </summary>
     public class PropertyContext
     {
-
+        public BTH BTH { get; set; }
         /// <summary>
         /// wPropId (2 bytes): Property ID, as specified in [MS-OXCDATA] section 2.9. This is the upper 16 
         /// bits of the property tag value.This is a manifestation of the BTH record (section 2.3.2.3) and
@@ -104,5 +106,9 @@ namespace core.LTP.PropertyContext
         /// 
         /// </summary>
         public UInt32 dwValueHnid { get; set; }
+        public PropertyContext(BlockBTreeEntry dataBlockBTreeEntry,BlockBTreeEntry subNodeDataBlockBTreeEntry)
+        {
+              
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace core.LTP.BTH
+﻿namespace core.LTP.BTreeOnHeap
 {
     /// <summary>
     /// Leaf BTH (Data) Records

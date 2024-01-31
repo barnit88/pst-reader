@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\core\core.csproj" />
+    <ProjectReference Include="..\XstReader.Api\XstReader.Api.csproj" />
   </ItemGroup>
 
 </Project>

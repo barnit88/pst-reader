@@ -112,13 +112,13 @@ namespace core.NDB.Pages.BTree
             this.cRef = BitConverter.ToUInt16(blockBTreeDataBytes, 18);
             this.dwPadding = 0;
             this.Block = new Block(file, Bref, this.cb);
-            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            Console.WriteLine("Block BTree Entry Information");
-            Console.WriteLine("Raw BREF: " + this.BREF);
-            Console.WriteLine("BREF Block Id: " + this.Bref.bid);
-            Console.WriteLine("Bref Block ib(offset): " + this.Bref.ib);
-            Console.WriteLine("Raw Data Count contained by this block : " + this.cb);
-            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            //Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            //Console.WriteLine("Block BTree Entry Information");
+            //Console.WriteLine("Raw BREF: " + this.BREF);
+            //Console.WriteLine("BREF Block Id: " + this.Bref.bid);
+            //Console.WriteLine("Bref Block ib(offset): " + this.Bref.ib);
+            //Console.WriteLine("Raw Data Count contained by this block : " + this.cb);
+            //Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++");
         }
     }
 }
