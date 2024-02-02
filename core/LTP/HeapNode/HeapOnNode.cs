@@ -6,13 +6,14 @@ namespace core.LTP.HeapNode
 {
     public class HeapOnNode
     {
-        public List<HeapOnNodeDataBlock> HeapsOnNode { get; set; }
+        public List<HeapOnNodeDataBlock> HeapOnNodeDataBlocks { get; set; }
         public HeapOnNode(List<BlockBTreeEntry> blocks)
         {
-            this.HeapsOnNode = new List<HeapOnNodeDataBlock>();
             if (blocks == null || blocks.Count == 0)
                 throw new Exception("Heap Node | Block Data null");
-            //this.HeapsOnNode.Add()
+            this.HeapOnNodeDataBlocks = new List<HeapOnNodeDataBlock>();
+            for (int i = 0; i < blocks.Count; i++)
+                HeapOnNodeDataBlocks.Add(new HeapOnNodeDataBlock(i, blocks[i].Block.DataBlock));
         }
     }
 }

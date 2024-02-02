@@ -1,4 +1,7 @@
-﻿using XstReader;
+﻿using core.Messaging;
+using Core.PST;
+using System.IO.MemoryMappedFiles;
+using XstReader;
 
 namespace PSTExtractor;
 //position : byte from where the reading will start
@@ -14,11 +17,11 @@ class Program
     public static void Main(string[] args)
     {
         string path = "C:\\Users\\Dell\\Workstation\\SoftwareDevelopment\\Dotnet\\NugetLibraries\\Personal\\PSTExtractionLibrary\\sample-pst\\source.pst";
-        //using (var memoryMappedFile = MemoryMappedFile.CreateFromFile(path, FileMode.Open))
-        //{
-        //    var pst = new PST(memoryMappedFile);
-        //    var message = new MessageStore(pst,SpecialInternalNId.NID_MESSAGE_STORE);
-        //}
+        using (var memoryMappedFile = MemoryMappedFile.CreateFromFile(path, FileMode.Open))
+        {
+            var pst = new PST(memoryMappedFile);
+            var message = new MessageStore(pst, SpecialInternalNId.NID_MESSAGE_STORE);
+        }
         OpenOstOrPstFile(path);
     }
     

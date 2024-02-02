@@ -17,5 +17,9 @@ namespace core.LTP.HeapNode
         /// the beginning of the HNPAGEHDR structure.
         /// </summary>
         public ushort ibHnpm { get; set; }
+        public HNPAGEHDR(byte[] dataBytes)
+        {
+            this.ibHnpm = BitConverter.ToUInt16(dataBytes, 0);
+        }
     }
 }

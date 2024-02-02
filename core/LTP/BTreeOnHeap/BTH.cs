@@ -14,6 +14,8 @@
     /// </summary>
     public class BTH
     {
-
+        public BTHHeader BTHHeader { get; set; }
+        public BTHIndex BTHIndex { get; set; }
+        public BTHDataRecord BTHDataRecord { get; set; }
     }
 }

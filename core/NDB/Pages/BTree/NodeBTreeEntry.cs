@@ -72,15 +72,15 @@ namespace core.NDB.Pages.BTree
             this.Nid = new Nid(nid);
             this.Bid = new Bid(bidData);
             this.BidSubNode = new Bid(bidSub);
-            //Console.WriteLine("------------------------------------------------------");
-            //Console.WriteLine("Node BTree Entry Information");
-            //Console.WriteLine("NID Value is : " + this.nid.ToString());
-            //Console.WriteLine("Parent Nid Value is : " + this.NidType.ToString());
-            //Console.WriteLine("NID Type is: " + this.NidType.ToString());
-            //Console.WriteLine("Special Internal NID is: " + this.SpecialInternalNID.ToString());
-            //Console.WriteLine("Bid Data is: " + this.bidData.ToString());
-            //Console.WriteLine("Sub Bid is: " + this.bidSub.ToString());
-            //Console.WriteLine("------------------------------------------------------");
+            Console.WriteLine("------------------------------------------------------");
+            Console.WriteLine("Node BTree Entry Information");
+            Console.WriteLine("NID Value is : " + this.nid.ToString());
+            Console.WriteLine("Parent Nid Value is : " + this.NidType.ToString());
+            Console.WriteLine("NID Type is: " + this.NidType.ToString());
+            Console.WriteLine("Special Internal NID is: " + this.SpecialInternalNID.ToString());
+            Console.WriteLine("Bid Data is: " + this.bidData.ToString());
+            Console.WriteLine("Sub Bid is: " + this.bidSub.ToString());
+            Console.WriteLine("------------------------------------------------------");
         }
     }
 }

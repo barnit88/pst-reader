@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace core.LTP.HeapNode
 {
@@ -52,6 +53,9 @@ namespace core.LTP.HeapNode
     /// </summary>
     public class HNHDR
     {
+        public HID HId { get; set; }
+        public HNClientSig ClientSig { get; set; }
+
         /// <summary>
         /// ibHnpm (2 bytes): The byte offset to the HN page Map record (section 2.3.1.5), with respect to the 
         /// beginning of the HNHDR structure.
@@ -88,7 +92,7 @@ namespace core.LTP.HeapNode
         /// hidUserRoot (4 bytes): HID that points to the User Root record. The User Root record contains data 
         /// that is specific to the higher level.
         /// </summary>
-        public uint hidUserRoot { get; set; }
+        public UInt32 hidUserRoot { get; set; }
         /// <summary>
         /// rgbFillLevel(4 bytes) : Per-block Fill Level Map.This array consists of eight 4-bit values that indicate
         /// the fill level for each of the first 8 data blocks (including this header block). If the HN has fewer
@@ -116,6 +120,15 @@ namespace core.LTP.HeapNode
         /// 
         /// 
         /// </summary>
-        public uint rgbFillLevel { get; set; }
+        public ulong rgbFillLevel { get; set; }//storing raw value for now
+        public HNHDR(byte[] dataBytes)
+        {
+            this.hidUserRoot = BitConverter.ToUInt16(dataBytes, 0);
+            this.bSig = dataBytes[2];
+            this.bClientSig = dataBytes[3];
+            this.hidUserRoot = BitConverter.ToUInt32(dataBytes, 4);
+            this.ClientSig = (HNClientSig)this.bClientSig;
+            this.HId = new HID(dataBytes.Skip(4).Take(4).ToArray());
+        }
     }
 }
