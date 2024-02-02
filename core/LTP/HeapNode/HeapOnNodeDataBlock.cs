@@ -1,6 +1,5 @@
 ﻿using core.NDB.Blocks;
 using System;
-using System.Data;
 
 namespace core.LTP.HeapNode
 {
@@ -59,7 +58,7 @@ namespace core.LTP.HeapNode
 
         public HeapOnNodeDataBlock(int blockIndex, DataBlock dataBlock)
         {
-            this.DataBlock = dataBlock; 
+            this.DataBlock = dataBlock;
             var dataBytes = dataBlock.data;
             this.PageOffset = BitConverter.ToUInt16(dataBytes, 0);
             this.HNPageMap = new HNPAGEMAP(dataBytes, this.PageOffset);
@@ -72,6 +71,14 @@ namespace core.LTP.HeapNode
             // All other blocks contain a HNPAGEHDR
             else
                 this.HNPageHeader = new HNPAGEHDR(dataBytes);
+        }
+        public byte[] GetAllocation(HID hidUserRoot)
+        {
+            var offsetBegining = this.HNPageMap.rgibAlloc[(int)hidUserRoot.hidIndex - 1];
+            var offsetEnd = this.HNPageMap.rgibAlloc[(int)hidUserRoot.hidIndex];
+            byte[] allocatiionData = new byte[offsetEnd - offsetBegining];
+            Array.Copy(this.DataBlock.data, offsetBegining, allocatiionData, 0, offsetEnd - offsetBegining);
+            return allocatiionData;
         }
     }
 }

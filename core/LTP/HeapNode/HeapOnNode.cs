@@ -15,5 +15,10 @@ namespace core.LTP.HeapNode
             for (int i = 0; i < blocks.Count; i++)
                 HeapOnNodeDataBlocks.Add(new HeapOnNodeDataBlock(i, blocks[i].Block.DataBlock));
         }
+        public static byte[] GetHNHIDBytes(HeapOnNode heapOnNode, HID hidUserRoot)
+        {
+            HeapOnNodeDataBlock hnblock = heapOnNode.HeapOnNodeDataBlocks[(int)hidUserRoot.hidBlockIndex];
+            return hnblock.GetAllocation(hidUserRoot);
+        }
     }
 }
