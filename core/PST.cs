@@ -1,10 +1,10 @@
-﻿using core.NDB.Headers;
-using core.NDB.Pages.BTree;
+﻿using core.NDBLayer.Headers;
+using core.NDBLayer.Pages.BTree;
 using System;
 using System.Collections.Generic;
 using System.IO.MemoryMappedFiles;
 
-namespace Core.PST
+namespace core
 {
     public class PST
     {

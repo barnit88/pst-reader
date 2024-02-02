@@ -1,4 +1,4 @@
-﻿using core.NDB.Blocks;
+﻿using core.NDBLayer.Blocks;
 using System;
 
 namespace core.LTP.HeapNode

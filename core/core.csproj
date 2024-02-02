@@ -6,11 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="NDB\Pages\Unicode\UnicodePage.txt" />
+    <None Remove="NDBLayer\Pages\Unicode\UnicodePage.txt" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="NDB\Pages\Unicode\UnicodePage.txt" />
+    <Compile Include="NDBLayer\Pages\Unicode\UnicodePage.txt" />
   </ItemGroup>
 
 </Project>

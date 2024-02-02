@@ -1,7 +1,7 @@
 ﻿using core.Messaging;
-using Core.PST;
 using System.IO.MemoryMappedFiles;
 using XstReader;
+using core;
 
 namespace PSTExtractor;
 //position : byte from where the reading will start

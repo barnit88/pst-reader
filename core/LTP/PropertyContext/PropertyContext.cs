@@ -1,6 +1,9 @@
 ﻿using core.LTP.BTreeOnHeap;
-using core.NDB.Pages.BTree;
+using core.LTP.HeapNode;
+using core.NDBLayer.Blocks;
+using core.NDBLayer.Pages.BTree;
 using System;
+using System.Collections.Generic;
 
 namespace core.LTP.PropertyContext
 {
@@ -108,7 +111,22 @@ namespace core.LTP.PropertyContext
         public UInt32 dwValueHnid { get; set; }
         public PropertyContext(BlockBTreeEntry dataBlockBTreeEntry,BlockBTreeEntry subNodeDataBlockBTreeEntry)
         {
-              
+            //List<BlockBTreeEntry> blocks
+            //var HeapOnNode = new HeapOnNode(/*dataBlockBTreeEntry.Block.*DataBlock*/);   
         }
+        //public PropertyContext(ulong nid, PSTFile pst)
+        //{
+        //    //var bytes = BlockBO.GetNodeData(nid, pst);
+        //    //var HN = new HN(bytes);
+        //    //this.BTH = new BTH(HN);
+        //    //this.Properties = this.BTH.GetExchangeProperties();
+        //}
+
+        //public PropertyContext(NodeDataDTO data)
+        //{
+        //    var HN = new HN(data);
+        //    this.BTH = new BTH(HN);
+        //    this.Properties = this.BTH.GetExchangeProperties();
+        //}
     }
 }

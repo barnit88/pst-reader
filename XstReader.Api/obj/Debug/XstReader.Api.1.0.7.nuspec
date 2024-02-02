@@ -15,7 +15,7 @@ Based on the great work of Dijji.
 Original project: https://github.com/dijji/XstReader</description>
     <copyright>Copyright (c) 2016, Dijji; 2021, iluvadev, and released under Ms-PL License.</copyright>
     <tags>outlook-files, pst-reader, ost-reader</tags>
-    <repository type="git" url="https://github.com/iluvadev/XstReader" commit="de7e6821fbe2d61c96a6128da34cb3a33ea2069d" />
+    <repository type="git" url="https://github.com/iluvadev/XstReader" commit="2fb93ac2a6b66f40b16bc174e274e5d6d62b69a4" />
     <dependencies>
       <group targetFramework=".NETStandard2.0">
         <dependency id="Microsoft.CSharp" version="4.7.0" exclude="Build,Analyzers" />

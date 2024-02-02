@@ -1,6 +1,5 @@
 ﻿using core.LTP.PropertyContext;
-using core.NDB.Pages.BTree;
-using Core.PST;
+using core.NDBLayer.Pages.BTree;
 
 namespace core.Messaging
 {
