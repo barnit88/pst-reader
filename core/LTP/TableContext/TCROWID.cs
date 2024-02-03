@@ -23,5 +23,9 @@ namespace core.LTP.TableContext
         /// the Row Matrix.Note that for ANSI PSTs, the maximum number of rows is 2^16.
         /// </summary>
         public Int32 dwRowIndex { get; set; }
+        public TCROWID()
+        {
+
+        }
     }
 }

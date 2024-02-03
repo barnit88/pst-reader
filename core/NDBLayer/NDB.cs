@@ -8,6 +8,22 @@ namespace core.NDBLayer
 {
     public class NDB
     {
+        public static NodeDataDTO GetNodeDataFromNodeBTreeEntry(NodeBTreeEntry nodeBTreeEntry,
+            List<IBTPageEntry> blockBTPageEntries)
+        {
+            NodeDataDTO nodeData = new NodeDataDTO();
+            nodeData.NodeID = nodeBTreeEntry.nid;
+            nodeData.NodeBlockId = nodeBTreeEntry.bidData;
+            nodeData.SubNodeBlockId = nodeBTreeEntry.bidSub;
+            BlockBTreeEntry nodeBlockBTreeEntry = GetBlockBTreeEntryFromBid(nodeData.NodeBlockId, blockBTPageEntries);
+            nodeData.NodeData = GetDataBlocksFromNodeBlockBTreeEntry(nodeBlockBTreeEntry, blockBTPageEntries);
+            if (nodeData.SubNodeBlockId != 0)
+            {
+                BlockBTreeEntry subNodeBlockBTreeEntry = GetBlockBTreeEntryFromBid(nodeData.SubNodeBlockId, blockBTPageEntries);
+                nodeData.SubNodeData = GetSubNodesDataBlockFromSubNodeBlockBTreeEntry(subNodeBlockBTreeEntry, blockBTPageEntries);
+            }
+            return nodeData;
+        }
         public static NodeDataDTO GetNodeDataFromNodeBlockBTreeEntry
             (BlockBTreeEntry nodesBlockBTreeEntry,
             List<IBTPageEntry> blockBTPageEntries)
@@ -81,7 +97,7 @@ namespace core.NDBLayer
                 throw new Exception("Not a valid SubNode Block");
             //Reference subnode of node
             if (subNodesBlock.BlockType == BlockType.SLBLOCK)
-                subNodes.AddRange(GetNodeDatasFromSLBlock(subNodesBlock.SLBlock,blockBTPageEntries));
+                subNodes.AddRange(GetNodeDatasFromSLBlock(subNodesBlock.SLBlock, blockBTPageEntries));
             if (subNodesBlock.BlockType == BlockType.SIBLOCK)
                 subNodes.AddRange(GetNodeDatasFromSIBlock(subNodesBlock.SIBlock, blockBTPageEntries));
             return subNodes;
@@ -196,7 +212,9 @@ namespace core.NDBLayer
                 {
                     var currentBTPageEntry = (BTEntry)currentEntry;
                     var nextBTPageEntry = (BTEntry)nextEntry;
-                    if (nid >= currentBTPageEntry.btkey && nid <= nextBTPageEntry.btkey)
+                    if (nid >= currentBTPageEntry.btkey && nid < nextBTPageEntry.btkey)
+                        return GetNodeBTreeEntryFromNid(nid, currentBTPageEntry.bTreePage.BTPageEntries);
+                    else if (i == nodeBTPageEntries.Count - 1 && nid > nextBTPageEntry.btkey)
                         return GetNodeBTreeEntryFromNid(nid, currentBTPageEntry.bTreePage.BTPageEntries);
                 }
                 else if (currentEntry.BTreePageEntriesType == BTreePageEntriesType.NBTENTRY)
@@ -210,7 +228,7 @@ namespace core.NDBLayer
                 else
                     throw new Exception("GetNidFromBid | BTPageEntryType error");
             }
-            throw new Exception("GetNidFromBid | No any NodeBTree found for provided Nid");
+            throw new Exception("GetNodeBTreeEntryFromNid | No any NodeBTree found for provided Nid");
         }
         /// <summary>
         /// Gets BlockBTreeEntry(Leaf Page) having specific block id of NDB layer.
@@ -231,7 +249,9 @@ namespace core.NDBLayer
                 {
                     var currentBTPageEntry = (BTEntry)currentEntry;
                     var nextBTPageEntry = (BTEntry)nextEntry;
-                    if (bid >= currentBTPageEntry.btkey && bid <= nextBTPageEntry.btkey)
+                    if (bid >= currentBTPageEntry.btkey && bid < nextBTPageEntry.btkey)
+                        return GetBlockBTreeEntryFromBid(bid, currentBTPageEntry.bTreePage.BTPageEntries);
+                    else if(i == blockBTPageEntries.Count -1 && bid> nextBTPageEntry.btkey)
                         return GetBlockBTreeEntryFromBid(bid, currentBTPageEntry.bTreePage.BTPageEntries);
                 }
                 else if (currentEntry.BTreePageEntriesType == BTreePageEntriesType.BBTENTRY)

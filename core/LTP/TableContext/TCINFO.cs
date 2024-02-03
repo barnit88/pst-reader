@@ -1,4 +1,6 @@
-﻿using System;
+﻿using core.LTP.HeapNode;
+using System;
+using System.Collections.Generic;
 
 namespace core.LTP.TableContext
 {
@@ -9,6 +11,9 @@ namespace core.LTP.TableContext
     /// </summary>
     public class TCINFO
     {
+        public HID HIDRowMatrixLocation { get; set; }
+        public HID HIDRowIndexLocation { get; set; }
+        public List<TCOLDESC> ColumnsDescriptors { get; set; } = new List<TCOLDESC>();
         /// <summary>
         /// bType (1 byte): TC signature; MUST be set to bTypeTC.
         /// </summary>
@@ -30,7 +35,7 @@ namespace core.LTP.TableContext
         /// 
         /// 
         /// </summary>
-        public UInt64 rgib { get; set; }
+        public Int16[] rgib { get; set; } = new Int16[4];
         /// <summary>
         /// hidRowIndex (4 bytes): HID to the Row ID BTH. The Row ID BTH contains (RowID, RowIndex) 
         /// value pairs that correspond to each row of the TC.The RowID is a value that is associated with the
@@ -54,5 +59,29 @@ namespace core.LTP.TableContext
         /// the tag field of TCOLDESC.
         /// </summary>
         public byte[] rgTCOLDESC { get; set; }
+        public TCINFO(byte[] dataBytes)
+        {
+            this.bType = dataBytes[0];
+            this.cCols = dataBytes[1];
+            for (int i = 0; i < 4; i++)
+            {
+                int tempOffset = (i * 2) + 2;
+                this.rgib[i] = BitConverter.ToInt16(dataBytes, tempOffset);
+            }
+            this.hidRowIndex = BitConverter.ToUInt32(dataBytes, 10);
+            byte[] tempHidRowIndexBytes = new byte[4];
+            Array.Copy(dataBytes, 10, tempHidRowIndexBytes, 0, 4);
+            this.HIDRowIndexLocation  = new HID(tempHidRowIndexBytes);
+            this.hnidRows = BitConverter.ToUInt32(dataBytes, 14);
+            byte[] tempHidRowMatrixBytes = new byte[4];
+            Array.Copy(dataBytes, 14, tempHidRowMatrixBytes, 0, 4);
+            this.HIDRowMatrixLocation = new HID(tempHidRowMatrixBytes);
+            this.hidIndex = BitConverter.ToUInt32(dataBytes, 18);//Depreciated value.Should be ignored
+            for (int i = 0; i < this.cCols; i++)
+            {
+                int colDescOffset = 22 + (i * 8);
+                this.ColumnsDescriptors.Add(new TCOLDESC(dataBytes, colDescOffset));
+            }
+        }
     }
 }

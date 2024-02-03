@@ -5,6 +5,7 @@ namespace core.NDBLayer.ID
 {
     public class Nid
     {
+        public ulong _Nid { get; set; }
         /// <summary>
         /// Special Internal NIDs
         /// 
@@ -80,7 +81,8 @@ namespace core.NDBLayer.ID
         ulong nidIndex;
         public Nid(ulong nid)
         {
-            nidType = nid & 0x1f;
+            this._Nid = nid;
+            nidType = nid & 0x1f;//Lowest five bits
             nidIndex = nid >> 5;
             NidType = (NidType)(nid & 0x1f);//Lowest five bits
             SpecialInternalNID = (SpecialInternalNID)nid;

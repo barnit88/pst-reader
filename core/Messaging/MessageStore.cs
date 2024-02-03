@@ -1,23 +1,23 @@
 ﻿using core.LTP.PropertyContext;
 using core.NDBLayer;
-using core.NDBLayer.Blocks;
 using core.NDBLayer.Pages.BTree;
-using System.Collections.Generic;
+using System;
+using System.Text;
 
 namespace core.Messaging
 {
     public class MessageStore
     {
-        public int RootFolderEntryId { get; set; }
+        public EntryId RootFolderEntryId { get; set; }
         public PropertyContext PropertyContext { get; set; }
-        public MessageStore(PST pst,SpecialInternalNId specialInternalNID)
+        public MessageStore(PST pst, SpecialInternalNId specialInternalNID)
         {
             ulong nid = (ulong)specialInternalNID;
             NodeBTreeEntry nodeBTreeEntry = NDB.GetNodeBTreeEntryFromNid(nid, pst.NodeBTPage.BTPageEntries);
             BlockBTreeEntry mainNodeBlockBTreeEntry = NDB.GetBlockBTreeEntryFromBid
-                                                        (nodeBTreeEntry.bidData,pst.BlockBTPage.BTPageEntries);
+                                                        (nodeBTreeEntry.bidData, pst.BlockBTPage.BTPageEntries);
             NodeDataDTO node = NDB.GetNodeDataFromNodeBlockBTreeEntry
-                                        (mainNodeBlockBTreeEntry,pst.BlockBTPage.BTPageEntries);
+                                        (mainNodeBlockBTreeEntry, pst.BlockBTPage.BTPageEntries);
             BlockBTreeEntry subNodeBlockBTreeEntry = null;
             if (nodeBTreeEntry.bidSub != 0)
             {
@@ -26,6 +26,8 @@ namespace core.Messaging
             }
 
             this.PropertyContext = new PropertyContext(node);
+            this.RootFolderEntryId = new EntryId(
+                this.PropertyContext.Properties[(ushort)RequireProperties.PidTagIpmSubTreeEntryId].Data);
         }
     }
 }

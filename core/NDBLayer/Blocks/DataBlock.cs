@@ -36,5 +36,13 @@ namespace core.NDBLayer.Blocks
                 throw new Exception("Data Block. Data Size Mismatch ");
             DatatEncoder.CryptPermute(data, data.Length, false, encodignType);
         }
+        public DataBlock(byte[] dataBlockBytes)
+        {
+            data = dataBlockBytes;
+            //BlockTrailer = new BlockTrailer(blockTrailerDataBytes);
+            if (data.Length != BlockTrailer.cb)
+                throw new Exception("Data Block. Data Size Mismatch ");
+            //DatatEncoder.CryptPermute(data, data.Length, false, encodignType);
+        }
     }
 }

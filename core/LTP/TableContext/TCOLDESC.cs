@@ -32,6 +32,13 @@ namespace core.LTP.TableContext
         /// corresponds to this Column.A detailed explanation of the mapping mechanism will be discussed in
         /// section 2.3.4.4.1.
         /// </summary>
-        public byte iBit{ get; set; }
+        public byte iBit { get; set; }
+        public TCOLDESC(byte[] dataBytes, int offset = 0)
+        {
+            this.tag = BitConverter.ToInt32(dataBytes, offset);
+            this.ibData = BitConverter.ToInt16(dataBytes, offset + 4);
+            this.cbData = dataBytes[offset + 6];
+            this.iBit = dataBytes[offset + 1];
+        }
     }
 }

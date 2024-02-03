@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading;
+using System.Xml.Linq;
 
 namespace core.Messaging
 {
@@ -63,5 +65,26 @@ namespace core.Messaging
         NID_RESERVED3 = 0x301,
         [Description("Search Gatherer Folder Queue")]
         NID_SEARCH_GATHERER_FOLDER_QUEUE = 0x321
+    }
+    /// <summary>
+    /// 
+    ///     Property   | Property       |                           |
+    ///     identifier | type           | Friendly name             |  Description
+    ///     0x3001     | PtypString     | PidTagDisplayName         |  Display name of the Folder object.
+    ///     0x3602     | PtypInteger32  | PidTagContentCount        |  Total number of items in the Folder object.
+    ///     0x3603     | PtypInteger32  | PidTagContentUnreadCount  |  Number of unread items in the Folder object.
+    ///     0x360A     | PtypBoolean    | PidTagSubfolders          |  Whether the Folder object has any sub-Folder objects.
+    ///     
+    /// </summary>
+    public enum FolderProperty : ushort
+    {
+        [Description("Display name of the Folder object. PtypString")]
+        PidTagDisplayName = 0x3001,
+        [Description("Total number of items in the Folder object. PtypInteger32")]
+        PidTagContentCount = 0x3602,
+        [Description("Number of unread items in the Folder object. PtypInteger32")]
+        PidTagContentUnreadCount = 0x3603,
+        [Description("Whether the Folder object has any sub-Folder objects. PtypBoolean")]
+        PidTagSubfolders = 0x360A,
     }
 }

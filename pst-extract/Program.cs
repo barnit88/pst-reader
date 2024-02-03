@@ -1,6 +1,7 @@
 ﻿using core;
 using core.Messaging;
 using System.IO.MemoryMappedFiles;
+using System.Text;
 
 namespace PSTExtractor;
 //position : byte from where the reading will start
@@ -20,8 +21,22 @@ class Program
         {
             var pst = new PST(memoryMappedFile);
             var message = new MessageStore(pst, SpecialInternalNId.NID_MESSAGE_STORE);
+            var rootFolder = new Folder(message.RootFolderEntryId.Nid, new List<string>()
+                , pst.NodeBTPage.BTPageEntries, pst.BlockBTPage.BTPageEntries);
+            var displayName = Encoding.Unicode.GetString(rootFolder.PropertyContext.Properties[(ushort)FolderProperty.PidTagDisplayName].Data);
+            var contentCount = BitConverter.ToInt32(rootFolder.PropertyContext.Properties[(ushort)FolderProperty.PidTagContentCount].Data);
+            var unreadContentCount = BitConverter.ToInt32(
+                rootFolder.PropertyContext.Properties[(ushort)FolderProperty.PidTagContentUnreadCount].Data);
+            var hasSubFolder = BitConverter.ToBoolean(
+                rootFolder.PropertyContext.Properties[(ushort)FolderProperty.PidTagSubfolders].Data);
+
+            Console.WriteLine("Display Name: " + displayName);
+            Console.WriteLine("Content Count: " + contentCount);
+            Console.WriteLine("Unread Content Count: " + unreadContentCount);
+            Console.WriteLine("Has Sub Folder: " + hasSubFolder.ToString());
         }
     }
+
     //public static void OpenOstOrPstFile(string fileName)
     //{
     //    // Note the "using": XstFile implements IDisposable

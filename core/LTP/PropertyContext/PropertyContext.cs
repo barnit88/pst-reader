@@ -1,6 +1,5 @@
 ﻿using core.LTP.BTreeOnHeap;
 using core.LTP.HeapNode;
-using core.Messaging;
 using core.NDBLayer;
 using System;
 using System.Collections.Generic;
@@ -78,7 +77,6 @@ namespace core.LTP.PropertyContext
     /// </summary>
     public class PropertyContext
     {
-        public EntryId RootFolderEntryId { get; set; }
         public Dictionary<UInt16, ExchangeProperty> Properties;//Copied
         public BTH BTH { get; set; }
         /// <summary>
@@ -116,21 +114,6 @@ namespace core.LTP.PropertyContext
             var heapOnNode = new HeapOnNode(node);
             this.BTH = new BTH(heapOnNode);
             this.Properties = BTH.GetExchangeProperties();
-            this.RootFolderEntryId = new EntryId(this.Properties[(ushort)RequireProperties.PidTagFinderEntryId].Data);
         }
-        //public PropertyContext(ulong nid, PSTFile pst)
-        //{
-        //    //var bytes = BlockBO.GetNodeData(nid, pst);
-        //    //var HN = new HN(bytes);
-        //    //this.BTH = new BTH(HN);
-        //    //this.Properties = this.BTH.GetExchangeProperties();
-        //}
-
-        //public PropertyContext(NodeDataDTO data)
-        //{
-        //    var HN = new HN(data);
-        //    this.BTH = new BTH(HN);
-        //    this.Properties = this.BTH.GetExchangeProperties();
-        //}
     }
 }

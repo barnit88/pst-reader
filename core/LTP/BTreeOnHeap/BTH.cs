@@ -27,7 +27,7 @@ namespace core.LTP.BTreeOnHeap
         public BTH(HeapOnNode heapOnNode, HID userRoot = null)
         {
             this.HeapOnNode = heapOnNode;
-            var bthHeaderHID = userRoot ?? heapOnNode.HeapOnNodeDataBlocks[0].HNHeader.HId;
+            var bthHeaderHID = userRoot ?? heapOnNode.HeapOnNodeDataBlocks[0].HNHeader.RootHId;
             this.BTHHeader = new BTHHeader(HeapOnNode.GetHNHIDBytes(heapOnNode, bthHeaderHID));
             this.BTHRoot = new BTHIndex(this, (int)this.BTHHeader.BIdxLevels);
             this.Properties = new Dictionary<byte[], BTHDataEntry>(new ByteArrayComparer());

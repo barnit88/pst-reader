@@ -35,7 +35,7 @@ namespace core.LTP.BTreeOnHeap
             this.Level = levels;//Levels
             this.HidRoot = bTreeOnHeap.BTHHeader.HidRoot;
             if (this.HidRoot.hidIndex == 0)
-                throw new Exception("BTHIndex | HID value error in hidIndex");
+                return;
             this.BTHIndexEntries = new List<BTHIndexEntry>();
             if (Level == 0)
                 this.BTHData = new BTHData(HidRoot, bTreeOnHeap);

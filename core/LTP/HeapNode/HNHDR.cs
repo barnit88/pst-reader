@@ -53,7 +53,7 @@ namespace core.LTP.HeapNode
     /// </summary>
     public class HNHDR
     {
-        public HID HId { get; set; }
+        public HID RootHId { get; set; }
         public HNClientSig ClientSig { get; set; }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace core.LTP.HeapNode
             this.bClientSig = dataBytes[3];
             this.hidUserRoot = BitConverter.ToUInt32(dataBytes, 4);
             this.ClientSig = (HNClientSig)this.bClientSig;
-            this.HId = new HID(dataBytes.Skip(4).Take(4).ToArray());
+            this.RootHId = new HID(dataBytes.Skip(4).Take(4).ToArray());
         }
     }
 }

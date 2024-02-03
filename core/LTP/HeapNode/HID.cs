@@ -8,6 +8,7 @@ namespace core.LTP.HeapNode
     /// </summary>
     public class HID
     {
+        public UInt32 hid { get; set; }
         /// <summary>
         /// hidType (5 bits): HID Type; MUST be set to 0 (NID_TYPE_HID) to indicate a valid HID.
         /// </summary>
@@ -26,6 +27,7 @@ namespace core.LTP.HeapNode
         {
             int offset = 0;
             var temp = BitConverter.ToUInt32(dataBytes, offset);
+            this.hid = temp;
             this.hidType = temp & 0x1F;
             this.hidIndex = (temp >> 5) & 0x7FF;
             this.hidBlockIndex = BitConverter.ToUInt16(dataBytes, offset + 2);
