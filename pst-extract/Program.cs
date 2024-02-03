@@ -23,127 +23,63 @@ class Program
             var message = new MessageStore(pst, SpecialInternalNId.NID_MESSAGE_STORE);
             var rootFolder = new Folder(message.RootFolderEntryId.Nid, new List<string>()
                 , pst.NodeBTPage.BTPageEntries, pst.BlockBTPage.BTPageEntries);
-            var displayName = Encoding.Unicode.GetString(rootFolder.PropertyContext.Properties[(ushort)FolderProperty.PidTagDisplayName].Data);
-            var contentCount = BitConverter.ToInt32(rootFolder.PropertyContext.Properties[(ushort)FolderProperty.PidTagContentCount].Data);
-            var unreadContentCount = BitConverter.ToInt32(
-                rootFolder.PropertyContext.Properties[(ushort)FolderProperty.PidTagContentUnreadCount].Data);
-            var hasSubFolder = BitConverter.ToBoolean(
-                rootFolder.PropertyContext.Properties[(ushort)FolderProperty.PidTagSubfolders].Data);
+            var namedPropertyLookup = new NamedPropertyLookup(pst.NodeBTPage.BTPageEntries, pst.BlockBTPage.BTPageEntries);
 
-            Console.WriteLine("Display Name: " + displayName);
-            Console.WriteLine("Content Count: " + contentCount);
-            Console.WriteLine("Unread Content Count: " + unreadContentCount);
-            Console.WriteLine("Has Sub Folder: " + hasSubFolder.ToString());
+
+
+
+
+
+
+
+
+
+
+            var stack = new Stack<Folder>();
+            stack.Push(rootFolder);
+            var totalCount = 0;
+
+            while (stack.Count > 0)
+            {
+                var curFolder = stack.Pop();
+                if (curFolder.SubFolders != null && curFolder.SubFolders.Count != 0)
+                    foreach (var child in curFolder.SubFolders)
+                        stack.Push(child);
+                var count = curFolder.ContentsTable.RowIndexBTH.Properties.Count;
+                totalCount += count;
+                foreach (var ipmItem in curFolder)
+                {
+                    if (ipmItem is MessageObject)
+                    {
+                        var messageObject = ipmItem as MessageObject;
+                        Console.WriteLine(messageObject.Subject);
+                        Console.WriteLine(messageObject.Imporance);
+                        Console.WriteLine("Sender Name: " + messageObject.SenderName);
+                        if (messageObject.From.Count > 0)
+                            Console.WriteLine("From: {0}",
+                                              String.Join("; ", messageObject.From.Select(r => r.EmailAddress)));
+                        if (messageObject.To.Count > 0)
+                            Console.WriteLine("To: {0}",
+                                              String.Join("; ", messageObject.To.Select(r => r.EmailAddress)));
+                        if (messageObject.CC.Count > 0)
+                            Console.WriteLine("CC: {0}",
+                                              String.Join("; ", messageObject.CC.Select(r => r.EmailAddress)));
+                        if (messageObject.BCC.Count > 0)
+                            Console.WriteLine("BCC: {0}",
+                                              String.Join("; ", messageObject.BCC.Select(r => r.EmailAddress)));
+                    }
+                }
+            }
         }
     }
 
-    //public static void OpenOstOrPstFile(string fileName)
-    //{
-    //    // Note the "using": XstFile implements IDisposable
-    //    // The file remains opened until dispose of XstFile
-    //    using (var xstFile = new XstFile(fileName))
-    //    {
-    //        ProcessFolder(xstFile.RootFolder);
-    //    }
-    //}
-
-    ////#### Processing a Folder
-    //public static void ProcessFolder(XstFolder folder)
-    //{
-    //    // We can process the properties of the Folder
-    //    var properties = folder.Properties;
-
-    //    // Messages in the folder
-    //    foreach (var message in folder.Messages)
-    //    {
-    //        ProcessMessage(message);
-    //    }
-
-    //    // Folders inside the folder
-    //    foreach (var childFolder in folder.Folders)
-    //    {
-    //        ProcessFolder(childFolder);
-    //    }
-    //}
-
-    ////#### Processing a Message
-    //public static void ProcessMessage(XstMessage message)
-    //{
-    //    // We can process the properties of the Message
-    //    var properties = message.Properties;
-
-    //    // Recipients of the Message
-    //    ProcessRecipients(message.Recipients);
-
-    //    // Body of the Message
-    //    ProcessBody(message.Body);
-
-    //    // Attachments in the message
-    //    foreach (var attachment in message.Attachments)
-    //    {
-    //        ProcessAttachment(attachment);
-    //    }
-    //}
-
-    ////#### Processing Recipients
-
-    //public static void ProcessRecipients(XstRecipientSet recipients)
-    //{
-    //    // We have info about recipients involved in a Message:
-    //    XstRecipient originator = recipients.Originator;
-    //    XstRecipient originalSentRepresenting = recipients.OriginalSentRepresenting;
-    //    XstRecipient sentRepresenting = recipients.SentRepresenting;
-    //    XstRecipient sender = recipients.Sender;
-    //    IEnumerable<XstRecipient> to = recipients.To;
-    //    IEnumerable<XstRecipient> cc = recipients.Cc;
-    //    IEnumerable<XstRecipient> bcc = recipients.Bcc;
-    //    XstRecipient receivedBy = recipients.ReceivedBy;
-    //    XstRecipient receivedRepresenting = recipients.ReceivedRepresenting;
-
-    //    // All Recipients with its own properties:
-    //    var senderProperties = sender.Properties;
-    //}
-
-    ////#### Processing Body
-    //public static void ProcessBody(XstMessageBody body)
-    //{
-    //    switch (body.Format)
-    //    {
-    //        case XstMessageBodyFormat.Html:
-    //            Console.Write("body in html"); break;
-    //        case XstMessageBodyFormat.Rtf:
-    //            Console.Write("body in rtf"); break;
-    //        case XstMessageBodyFormat.PlainText:
-    //            Console.Write("body in txt"); break;
-    //    }
-
-    //    // The Body in the format can be accessed by text or bytearray
-    //    var text = body.Text;
-    //    var bytes = body.Bytes;
-    //}
-    ////#### Processing Attachment
-    //public static void ProcessAttachment(XstAttachment attachment)
-    //{
-    //    string fileName = "myAttachment";
-
-    //    // We can process the properties of the Attachment
-    //    var properties = attachment.Properties;
-
-    //    // We can open attached Messages
-    //    if (attachment.IsEmail)
-    //        ProcessMessage(attachment.AttachedEmailMessage);
-    //    // We can save attachments
-    //    else if (attachment.IsFile)
-    //        attachment.SaveToFile(fileName, attachment.LastModificationTime);
-    //}
-}
-
-//There are more NID Types
-public enum rgnidType : int //(NID_TYPE)
-{
-    //NID_TYPE = Starting nidIndex
-    NID_TYPE_NORMAL_FOLDER = 1024,//Hex 0x400
-    NID_TYPE_SEARCH_FOLDER = 16384,//Hex 0x4000
-    NID_TYPE_NORMAL_MESSAGE = 65536,//Hex 0x10000
-    NIDE_TYPE_ASSOC_MESSAGE = 32768//Hex 0x8000
+    //There are more NID Types
+    public enum rgnidType : int //(NID_TYPE)
+    {
+        //NID_TYPE = Starting nidIndex
+        NID_TYPE_NORMAL_FOLDER = 1024,//Hex 0x400
+        NID_TYPE_SEARCH_FOLDER = 16384,//Hex 0x4000
+        NID_TYPE_NORMAL_MESSAGE = 65536,//Hex 0x10000
+        NIDE_TYPE_ASSOC_MESSAGE = 32768//Hex 0x8000
+    }
 }

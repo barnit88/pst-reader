@@ -35,7 +35,7 @@ namespace core.Messaging
     /// relationships among these elements.
     /// 
     /// </summary>
-    public class Folder
+    public class Folder : IEnumerable<IPMItem>
     {
         public PropertyContext PropertyContext { get; set; }
         public TableContext HierarchyTable { get; set; }
@@ -44,21 +44,22 @@ namespace core.Messaging
         public List<Folder> SubFolders { get; set; }
         public string DisplayName { get; set; }
         public List<string> Path { get; set; }
+        private List<IBTPageEntry> NodeBTPageEntries;
+        private List<IBTPageEntry> BlockBTPageEntries;
         public Folder(Nid nid, List<string> path, List<IBTPageEntry> nodeBTPageEntries, List<IBTPageEntry> blockBTPageEntries)
         {
+            this.NodeBTPageEntries = nodeBTPageEntries;
+            this.BlockBTPageEntries = blockBTPageEntries;
             var pcNid = ((nid._Nid >> 5) << 5) | 0x02;
             var hirearchyTableNid = ((nid._Nid >> 5) << 5) | 0x0D;
             var contentsTableNid = ((nid._Nid >> 5) << 5) | 0x0E;
             var associatedContentsTableNid = ((nid._Nid >> 5) << 5) | 0x0F;
-            //NodeBTreeEntry nodeBTreeEntry = NDB.GetNodeBTreeEntryFromNid(pcNid, nodeBTPageEntries);
-            //BlockBTreeEntry blockBTreeEntry = NDB.GetBlockBTreeEntryFromBid(nodeBTreeEntry.bidData, blockBTPageEntries);
-            //NodeDataDTO nodeDataDto = NDB.GetNodeDataFromNodeBlockBTreeEntry(blockBTreeEntry, blockBTPageEntries);
 
-            this.PropertyContext = new PropertyContext(GetNodeDataForPC(pcNid,nodeBTPageEntries,blockBTPageEntries));
+            this.PropertyContext = new PropertyContext(GetNodeDataFromNid(pcNid, nodeBTPageEntries, blockBTPageEntries));
             this.DisplayName = Encoding.Unicode.GetString(this.PropertyContext.Properties[(ushort)FolderProperty.PidTagDisplayName].Data);
             this.Path = new List<string>(path);
             this.Path.Add(DisplayName);
-            this.HierarchyTable = new TableContext(hirearchyTableNid, GetNodeDataForPC(hirearchyTableNid, nodeBTPageEntries, blockBTPageEntries));
+            this.HierarchyTable = new TableContext(hirearchyTableNid, GetNodeDataFromNid(hirearchyTableNid, nodeBTPageEntries, blockBTPageEntries));
             var hasSubFolder = BitConverter.ToBoolean(this.PropertyContext.Properties[(ushort)FolderProperty.PidTagSubfolders].Data);
             if (hasSubFolder && this.HierarchyTable.ReverseRowIndex.Count > 0)
             {
@@ -68,14 +69,29 @@ namespace core.Messaging
                     this.SubFolders.Add(new Folder(new Nid(row.Value), this.Path, nodeBTPageEntries, blockBTPageEntries));
                 }
             }
-            this.ContentsTable = new TableContext(contentsTableNid, GetNodeDataForPC(contentsTableNid, nodeBTPageEntries, blockBTPageEntries));
-            this.AssociatedContentsTable = new TableContext(associatedContentsTableNid, GetNodeDataForPC(associatedContentsTableNid, nodeBTPageEntries, blockBTPageEntries));
+            this.ContentsTable = new TableContext(contentsTableNid, GetNodeDataFromNid(contentsTableNid, nodeBTPageEntries, blockBTPageEntries));
+            this.AssociatedContentsTable = new TableContext(associatedContentsTableNid, GetNodeDataFromNid(associatedContentsTableNid, nodeBTPageEntries, blockBTPageEntries));
         }
-        public NodeDataDTO GetNodeDataForPC(ulong nid, List<IBTPageEntry> nodeBTPageEntries, List<IBTPageEntry> blockBTPageEntries)
+        public NodeDataDTO GetNodeDataFromNid(ulong nid, List<IBTPageEntry> nodeBTPageEntries, List<IBTPageEntry> blockBTPageEntries)
         {
             NodeBTreeEntry nodeBTreeEntry = NDB.GetNodeBTreeEntryFromNid(nid, nodeBTPageEntries);
             NodeDataDTO nodeData = NDB.GetNodeDataFromNodeBTreeEntry(nodeBTreeEntry, blockBTPageEntries);
             return nodeData;
+        }
+
+        public IEnumerator<IPMItem> GetEnumerator()
+        {
+            foreach (var row in this.ContentsTable.ReverseRowIndex)
+            {
+                NodeDataDTO node = GetNodeDataFromNid(row.Value, this.NodeBTPageEntries, this.BlockBTPageEntries);
+                var curItem = new IPMItem(node);
+                yield return new MessageObject(curItem, node);
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

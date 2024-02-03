@@ -1,13 +1,13 @@
+C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\XstReader.Api\bin\Debug\netstandard2.0\XstReader.Api.deps.json
+C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\XstReader.Api\bin\Debug\netstandard2.0\XstReader.Api.dll
+C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\XstReader.Api\bin\Debug\netstandard2.0\XstReader.Api.pdb
+C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\XstReader.Api\bin\Debug\netstandard2.0\XstReader.Api.xml
 C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\XstReader.Api\obj\Debug\netstandard2.0\XstReader.Api.csproj.AssemblyReference.cache
 C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\XstReader.Api\obj\Debug\netstandard2.0\XstReader.Api.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\XstReader.Api\obj\Debug\netstandard2.0\XstReader.Api.AssemblyInfoInputs.cache
 C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\XstReader.Api\obj\Debug\netstandard2.0\XstReader.Api.AssemblyInfo.cs
 C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\XstReader.Api\obj\Debug\netstandard2.0\XstReader.Api.csproj.CoreCompileInputs.cache
 C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\XstReader.Api\obj\Debug\netstandard2.0\XstReader.Api.sourcelink.json
-C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\XstReader.Api\bin\Debug\netstandard2.0\XstReader.Api.deps.json
-C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\XstReader.Api\bin\Debug\netstandard2.0\XstReader.Api.dll
-C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\XstReader.Api\bin\Debug\netstandard2.0\XstReader.Api.pdb
-C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\XstReader.Api\bin\Debug\netstandard2.0\XstReader.Api.xml
 C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\XstReader.Api\obj\Debug\netstandard2.0\XstReader.Api.dll
 C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\XstReader.Api\obj\Debug\netstandard2.0\refint\XstReader.Api.dll
 C:\Users\Dell\Workstation\SoftwareDevelopment\Dotnet\NugetLibraries\Personal\PSTExtractionLibrary\pst-extract\XstReader.Api\obj\Debug\netstandard2.0\XstReader.Api.xml

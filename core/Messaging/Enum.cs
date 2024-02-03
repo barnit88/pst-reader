@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Xml.Linq;
+using static System.Collections.Specialized.BitVector32;
 
 namespace core.Messaging
 {
@@ -86,5 +88,59 @@ namespace core.Messaging
         PidTagContentUnreadCount = 0x3603,
         [Description("Whether the Folder object has any sub-Folder objects. PtypBoolean")]
         PidTagSubfolders = 0x360A,
+    }
+    /// <summary>
+    /// 
+    ///     wGuid  | Friendly name                |   Description
+    ///     0x0000 | NAMEID_GUID_NONE             |   No GUID(N= 1).
+    ///     0x0001 | NAMEID_GUID_MAPI             |   The GUID is PS_MAPI([MS-OXPROPS] section 1.3.2).
+    ///     0x0002 | NAMEID_GUID_PUBLIC_STRINGS   |   The GUID is PS_PUBLIC_STRINGS([MSOXPROPS] section 1.3.2).
+    ///     0x0003 | N/A                          |   GUID is found at the(N-3) * 16 byte offset in the GUID Stream.
+    ///     
+    /// </summary>
+    public enum NameIDwGuid : byte
+    {
+        [Description("No GUID(N= 1).")]
+        NAMEID_GUID_NONE = 0x0000,
+        [Description("The GUID is PS_MAPI([MS-OXPROPS] section 1.3.2).")]
+        NAMEID_GUID_MAPI = 0x0001,
+        [Description("The GUID is PS_PUBLIC_STRINGS([MS\u0002OXPROPS] section 1.3.2).")]
+        NAMEID_GUID_PUBLIC_STRINGS = 0x0002,
+        [Description("GUID is found at the(N-3) * 16 byte offset in the GUID Stream.")]
+        None = 0x0003,
+    }
+
+
+    public enum ObjectType
+    {
+        STORE = 0x01,
+        ADDRESS_BOOK = 0x02,
+        ADDRESS_BOOK_CONTAINER = 0x04,
+        MESSAGE_OBJECT = 0x05,
+        MAIL_USER = 0x06,
+        ATTACHMENT = 0x07,
+        DISTRIBUTION_LIST = 0x08
+    }
+    public enum RecipientType
+    {
+        FROM = 0x00,
+        TO = 0x01,
+        CC = 0x02,
+        BCC = 0x03
+    }
+
+    public enum Importance
+    {
+        LOW = 0x00,
+        NORMAL = 0x01,
+        HIGH = 0x02
+    }
+
+    public enum Sensitivity
+    {
+        Normal = 0x00,
+        Personal = 0x01,
+        Private = 0x02,
+        Confidential = 0x03
     }
 }
