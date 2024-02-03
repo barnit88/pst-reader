@@ -39,8 +39,6 @@ namespace core.Messaging
         public UInt32 nid { get; set; }
         public EntryId(byte[] dataBytes, int offset = 0)
         {
-            if (dataBytes.Length != 24)
-                throw new Exception("Data Bytes Lenght error in EntryID");
             this.rgbFlags = BitConverter.ToUInt32(dataBytes, offset);
             this.uid = new byte[16];
             Array.Copy(dataBytes, offset + 4, this.uid, 0, 16);

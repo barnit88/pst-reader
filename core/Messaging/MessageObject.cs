@@ -75,10 +75,10 @@ namespace core.Messaging
                 switch (temp.NidType)
                 {
                     case NidType.NID_TYPE_ATTACHMENT_TABLE:
-                        this.AttachmentTable = new TableContext(this.NID, node);
+                        this.AttachmentTable = new TableContext(subNode);
                         break;
                     case NidType.NID_TYPE_ATTACHMENT:
-                        this.AttachmentPC = new PropertyContext(node);
+                        this.AttachmentPC = new PropertyContext(subNode);
                         this.Attachments = new List<Attachment>();
                         foreach (var row in this.AttachmentTable.TCRowMatrix.Rows)
                         {
@@ -86,7 +86,7 @@ namespace core.Messaging
                         }
                         break;
                     case NidType.NID_TYPE_RECIPIENT_TABLE:
-                        this.RecipientTable = new TableContext(this.NID, node);
+                        this.RecipientTable = new TableContext(subNode);
 
                         foreach (var row in this.RecipientTable.TCRowMatrix.Rows)
                         {

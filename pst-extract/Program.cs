@@ -1,7 +1,7 @@
 ﻿using core;
 using core.Messaging;
+using System.Diagnostics;
 using System.IO.MemoryMappedFiles;
-using System.Text;
 
 namespace PSTExtractor;
 //position : byte from where the reading will start
@@ -16,6 +16,8 @@ class Program
 {
     public static void Main(string[] args)
     {
+        var sw = new Stopwatch();
+        sw.Start();
         string path = "C:\\Users\\Dell\\Workstation\\SoftwareDevelopment\\Dotnet\\NugetLibraries\\Personal\\PSTExtractionLibrary\\sample-pst\\source.pst";
         using (var memoryMappedFile = MemoryMappedFile.CreateFromFile(path, FileMode.Open))
         {
@@ -24,14 +26,6 @@ class Program
             var rootFolder = new Folder(message.RootFolderEntryId.Nid, new List<string>()
                 , pst.NodeBTPage.BTPageEntries, pst.BlockBTPage.BTPageEntries);
             var namedPropertyLookup = new NamedPropertyLookup(pst.NodeBTPage.BTPageEntries, pst.BlockBTPage.BTPageEntries);
-
-
-
-
-
-
-
-
 
 
 
@@ -71,15 +65,8 @@ class Program
                 }
             }
         }
-    }
-
-    //There are more NID Types
-    public enum rgnidType : int //(NID_TYPE)
-    {
-        //NID_TYPE = Starting nidIndex
-        NID_TYPE_NORMAL_FOLDER = 1024,//Hex 0x400
-        NID_TYPE_SEARCH_FOLDER = 16384,//Hex 0x4000
-        NID_TYPE_NORMAL_MESSAGE = 65536,//Hex 0x10000
-        NIDE_TYPE_ASSOC_MESSAGE = 32768//Hex 0x8000
+        sw.Stop();
+        Console.WriteLine("{0} messages total"+ sw.Elapsed);
+        Console.WriteLine("Elapsed Milisecod  "+ sw.ElapsedMilliseconds);
     }
 }

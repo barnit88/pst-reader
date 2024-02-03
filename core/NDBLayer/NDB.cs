@@ -24,7 +24,7 @@ namespace core.NDBLayer
             }
             return nodeData;
         }
-        public static NodeDataDTO GetNodeDataFromNodeBlockBTreeEntry
+        private static NodeDataDTO GetNodeDataFromNodeBlockBTreeEntry
             (BlockBTreeEntry nodesBlockBTreeEntry,
             List<IBTPageEntry> blockBTPageEntries)
         {
@@ -214,7 +214,7 @@ namespace core.NDBLayer
                     var nextBTPageEntry = (BTEntry)nextEntry;
                     if (nid >= currentBTPageEntry.btkey && nid < nextBTPageEntry.btkey)
                         return GetNodeBTreeEntryFromNid(nid, currentBTPageEntry.bTreePage.BTPageEntries);
-                    else if (i == nodeBTPageEntries.Count - 1 && nid > nextBTPageEntry.btkey)
+                    else if (i == nodeBTPageEntries.Count - 1 && nid >= nextBTPageEntry.btkey)
                         return GetNodeBTreeEntryFromNid(nid, currentBTPageEntry.bTreePage.BTPageEntries);
                 }
                 else if (currentEntry.BTreePageEntriesType == BTreePageEntriesType.NBTENTRY)
@@ -251,7 +251,7 @@ namespace core.NDBLayer
                     var nextBTPageEntry = (BTEntry)nextEntry;
                     if (bid >= currentBTPageEntry.btkey && bid < nextBTPageEntry.btkey)
                         return GetBlockBTreeEntryFromBid(bid, currentBTPageEntry.bTreePage.BTPageEntries);
-                    else if(i == blockBTPageEntries.Count -1 && bid> nextBTPageEntry.btkey)
+                    else if (i == blockBTPageEntries.Count - 1 && bid >= nextBTPageEntry.btkey)
                         return GetBlockBTreeEntryFromBid(bid, currentBTPageEntry.bTreePage.BTPageEntries);
                 }
                 else if (currentEntry.BTreePageEntriesType == BTreePageEntriesType.BBTENTRY)

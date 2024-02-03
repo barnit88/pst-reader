@@ -66,7 +66,7 @@ namespace core.NDBLayer.Blocks
             {
                 byte[] temp = new byte[16];
                 int position = (i - 1) * 16;
-                Array.Copy(rgentries, 0, temp, 0, 16);
+                Array.Copy(rgentries, position, temp, 0, 16);
                 SIEntries.Add(new SIEntry(temp));
             }
             blockTrailer = new BlockTrailer(siBlockTrailerDataBytes);
