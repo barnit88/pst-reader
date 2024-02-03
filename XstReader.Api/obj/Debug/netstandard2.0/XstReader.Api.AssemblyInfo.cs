@@ -20,7 +20,7 @@ Project site: https://github.com/iluvadev/XstReader
 Based on the great work of Dijji.
 Original project: https://github.com/dijji/XstReader")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.7")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.7+370efb4f44126b3af9ee64d1f0822c193a365fd1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.7")]
 [assembly: System.Reflection.AssemblyProductAttribute("XstReader.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("XstReader.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.7")]

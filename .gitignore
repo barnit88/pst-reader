@@ -3,3 +3,5 @@ core/obj/
 core/bin/
 pst-extract/bin/
 pst-extract/obj/
+XstReader.Api/bin/
+XstReader.Api/obj/

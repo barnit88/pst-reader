@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "GIghTVeMbQAzSpcdn9h7vZ2sD5Lsdij5QFMqCUCDWgdI+vStnKwlPIp6ztEikD0BzlHS9A/W3UqNoTZqKxFVPA==",
+  "dgSpecHash": "nHJ6j6WA99GEgbtbVRsZKXwSLlWQYCvWDTkwRGxjrefMmXLuKo+TQWLWZOuNGqRrLUvwRT3U+VLNiBkRsd43YQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Dell\\Workstation\\SoftwareDevelopment\\Dotnet\\NugetLibraries\\Personal\\PSTExtractionLibrary\\pst-extract\\XstReader.Api\\XstReader.Api.csproj",
+  "projectFilePath": "C:\\Users\\Dell\\Workstation\\SoftwareDevelopment\\Dotnet\\NugetLibraries\\Personal\\PSTExtractionLibrary\\pst-extract\\pst-extract\\XstReader.Api\\XstReader.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Dell\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\Dell\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
