@@ -47,7 +47,7 @@ namespace core.NDBLayer.Pages.BTree
         public byte[] BREF = new byte[16];
         #endregion 
 
-        public BTEntry(MemoryMappedFile mmf, byte[] btentryBytes, BTreeEntryType bTreeEntryType)
+        public BTEntry(MemoryMappedFile mmf, byte[] btentryBytes, BTreeEntryType bTreeEntryType,bCryptMethodType encodignType)
         {
             //Console.WriteLine("+_+_+_+_+_+_+_+_+_+_+_+_+BTree Entry+_+_+_+_+_+_+_+_+_+_+_+_+_+");
             BTreeEntryType = bTreeEntryType;
@@ -56,9 +56,9 @@ namespace core.NDBLayer.Pages.BTree
             Array.Copy(btentryBytes, 8, brefData, 0, 16);
             Bref = new Bref(brefData);
             if (bTreeEntryType == BTreeEntryType.NBTreeEntry)
-                bTreePage = new BTreePage(mmf, Bref, BTreeType.NBT);
+                bTreePage = new BTreePage(mmf, Bref, BTreeType.NBT, encodignType);
             else if (bTreeEntryType == BTreeEntryType.BBTreeEntry)
-                bTreePage = new BTreePage(mmf, Bref, BTreeType.BBT);
+                bTreePage = new BTreePage(mmf, Bref, BTreeType.BBT, encodignType);
             //Console.WriteLine("+_+_+_+_+_+_+_+_+_+_+_+_+BTree Entry+_+_+_+_+_+_+_+_+_+_+_+_+_+");
         }
     }

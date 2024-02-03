@@ -16,9 +16,11 @@ namespace core.LTP.BTreeOnHeap
         {
             int keyOffset = offset;
             int keySize = (int)tree.BTHHeader.CbKey;
+            this.Key = new byte[keySize];
             Array.Copy(data, keyOffset, this.Key, 0, keySize);
             int dataOffset = keyOffset + keySize;
-            int dataSize = (int)(dataOffset + tree.BTHHeader.CbEnt);
+            int dataSize = (int)(tree.BTHHeader.CbEnt);
+            this.Data = new byte[dataSize];
             Array.Copy(data, dataOffset, this.Data, 0, dataSize);
         }
     }

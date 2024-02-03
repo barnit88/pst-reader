@@ -96,7 +96,7 @@ namespace core.NDBLayer.Pages.BTree
         /// </summary>
         public uint dwPadding;
         #endregion
-        public BlockBTreeEntry(byte[] blockBTreeDataBytes, MemoryMappedFile file)
+        public BlockBTreeEntry(byte[] blockBTreeDataBytes, MemoryMappedFile file,bCryptMethodType encodignType)
         {
             byte[] brefDataBytes = new byte[16];
             Array.Copy(blockBTreeDataBytes, 0, brefDataBytes, 0, 16);
@@ -105,7 +105,7 @@ namespace core.NDBLayer.Pages.BTree
             cb = BitConverter.ToUInt16(blockBTreeDataBytes, 16);
             cRef = BitConverter.ToUInt16(blockBTreeDataBytes, 18);
             dwPadding = 0;
-            Block = new Block(file, Bref, cb);
+            Block = new Block(file, Bref, cb, encodignType);
             //Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++");
             //Console.WriteLine("Block BTree Entry Information");
             //Console.WriteLine("Raw BREF: " + this.BREF);

@@ -1,4 +1,6 @@
 ﻿using core.LTP.HeapNode;
+using core.LTP.PropertyContext;
+using System;
 using System.Collections.Generic;
 
 namespace core.LTP.BTreeOnHeap
@@ -41,6 +43,31 @@ namespace core.LTP.BTreeOnHeap
                     foreach (var child in cur.BTHIndexes)
                         stack.Push(child);
             }
+        }
+        //copied
+        public Dictionary<ushort, ExchangeProperty> GetExchangeProperties()
+        {
+            var ret = new Dictionary<ushort, ExchangeProperty>();
+            var stack = new Stack<BTHIndex>();
+            stack.Push(this.BTHRoot);
+            while (stack.Count > 0)
+            {
+                var cur = stack.Pop();
+
+                if (cur.BTHData != null)
+                    foreach (var entry in cur.BTHData.BTHDataEntries)
+                    {
+                        var curKey = BitConverter.ToUInt16(entry.Key, 0);
+                        int i = 0;
+                        if (curKey == 0x02)
+                            i++;
+                        ret.Add(curKey, new ExchangeProperty(entry, this));
+                    }
+                if (cur.BTHIndexes != null)
+                    foreach (var child in cur.BTHIndexes)
+                        stack.Push(child);
+            }
+            return ret;
         }
     }
 }

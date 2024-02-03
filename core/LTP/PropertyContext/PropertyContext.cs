@@ -1,7 +1,7 @@
 ﻿using core.LTP.BTreeOnHeap;
 using core.LTP.HeapNode;
-using core.NDBLayer.Blocks;
-using core.NDBLayer.Pages.BTree;
+using core.Messaging;
+using core.NDBLayer;
 using System;
 using System.Collections.Generic;
 
@@ -78,6 +78,8 @@ namespace core.LTP.PropertyContext
     /// </summary>
     public class PropertyContext
     {
+        public EntryId RootFolderEntryId { get; set; }
+        public Dictionary<UInt16, ExchangeProperty> Properties;//Copied
         public BTH BTH { get; set; }
         /// <summary>
         /// wPropId (2 bytes): Property ID, as specified in [MS-OXCDATA] section 2.9. This is the upper 16 
@@ -109,10 +111,12 @@ namespace core.LTP.PropertyContext
         /// 
         /// </summary>
         public UInt32 dwValueHnid { get; set; }
-        public PropertyContext(BlockBTreeEntry dataBlockBTreeEntry,BlockBTreeEntry subNodeDataBlockBTreeEntry)
+        public PropertyContext(NodeDataDTO node)
         {
-            //List<BlockBTreeEntry> blocks
-            //var HeapOnNode = new HeapOnNode(/*dataBlockBTreeEntry.Block.*DataBlock*/);   
+            var heapOnNode = new HeapOnNode(node);
+            this.BTH = new BTH(heapOnNode);
+            this.Properties = BTH.GetExchangeProperties();
+            this.RootFolderEntryId = new EntryId(this.Properties[(ushort)RequireProperties.PidTagFinderEntryId].Data);
         }
         //public PropertyContext(ulong nid, PSTFile pst)
         //{

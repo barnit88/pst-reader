@@ -28,12 +28,13 @@ namespace core.NDBLayer.Blocks
         /// Block Trailer holds the metadata about the block
         /// </summary>
         public BlockTrailer BlockTrailer { get; set; }
-        public DataBlock(byte[] dataBlockBytes, byte[] blockTrailerDataBytes)
+        public DataBlock(byte[] dataBlockBytes, byte[] blockTrailerDataBytes, bCryptMethodType encodignType)
         {
             data = dataBlockBytes;
             BlockTrailer = new BlockTrailer(blockTrailerDataBytes);
             if (data.Length != BlockTrailer.cb)
                 throw new Exception("Data Block. Data Size Mismatch ");
+            DatatEncoder.CryptPermute(data, data.Length, false, encodignType);
         }
     }
 }

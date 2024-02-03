@@ -104,7 +104,7 @@ namespace core.NDBLayer.Pages.BTree
         /// </summary>
         protected byte[] pageTrailer;
         #endregion
-        public BTreePage(MemoryMappedFile mmf, Bref bref, BTreeType bTreeType)
+        public BTreePage(MemoryMappedFile mmf, Bref bref, BTreeType bTreeType,bCryptMethodType encodignType)
         {
             BTreeType = bTreeType;
             using (MemoryMappedViewAccessor view =
@@ -130,11 +130,12 @@ namespace core.NDBLayer.Pages.BTree
                 else
                     BTreePageEntriesType = BTreePageEntriesType.BTENTRY;
                 PageTrailer = new PageTrailer(pageTrailerByte: pageTrailer, bref: bref);
-                ConfigureBTreeEntries(view, mmf, bTreeType);
+                ConfigureBTreeEntries(view, mmf, bTreeType,encodignType);
             }
         }
 
-        private void ConfigureBTreeEntries(MemoryMappedViewAccessor view, MemoryMappedFile file, BTreeType bTreeType)
+        private void ConfigureBTreeEntries
+            (MemoryMappedViewAccessor view, MemoryMappedFile file, BTreeType bTreeType, bCryptMethodType encodignType)
         {
             BTPageEntries = new List<IBTPageEntry>();
             for (var i = 0; i < cEnt; i++)
@@ -144,10 +145,11 @@ namespace core.NDBLayer.Pages.BTree
                 if (BTreePageEntriesType == BTreePageEntriesType.NBTENTRY)
                     BTPageEntries.Add(new NodeBTreeEntry(curEntryBytes));
                 else if (BTreePageEntriesType == BTreePageEntriesType.BBTENTRY)
-                    BTPageEntries.Add(new BlockBTreeEntry(curEntryBytes, file));
+                    BTPageEntries.Add(new BlockBTreeEntry(curEntryBytes, file, encodignType));
                 else if (BTreePageEntriesType == BTreePageEntriesType.BTENTRY)
                     BTPageEntries.Add(new BTEntry(file, curEntryBytes,
-                        bTreeType == BTreeType.NBT ? BTreeEntryType.NBTreeEntry : BTreeEntryType.BBTreeEntry));
+                        bTreeType == BTreeType.NBT ? BTreeEntryType.NBTreeEntry : BTreeEntryType.BBTreeEntry, 
+                        encodignType));
             }
         }
         private void ConfigurecbEnt(byte cLevel)

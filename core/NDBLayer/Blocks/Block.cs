@@ -110,7 +110,7 @@ namespace core.NDBLayer.Blocks
         /// excluding the block trailer and alignment padding, if any.
         /// This value comes from the cb(2bytes) value in the BlockBTreeEntry 
         /// </param>
-        public Block(MemoryMappedFile file, Bref bref, ushort blockDataSize)
+        public Block(MemoryMappedFile file, Bref bref, ushort blockDataSize, bCryptMethodType encodignType)
         {
             decimal blockDataAndTrailerSize = blockDataSize + 16;
             decimal tempValue = blockDataAndTrailerSize / 64;
@@ -126,12 +126,12 @@ namespace core.NDBLayer.Blocks
                 view.ReadArray(blockTrailerDataStartPosition, blockTrailerDataBytes, 0, 16);
                 BlockTrailer = new BlockTrailer(blockTrailerDataBytes);
                 byte[] blockDataBytes = new byte[blockDataSize];
-                view.ReadArray(0, blockDataBytes, 0, blockDataSize);
+                view.ReadArray(0, blockDataBytes, 0, (int)blockDataSize);
                 if (bref.ExternalOrInternalBid == ExternalOrInternalBid.External)
                 {
                     //External. This is a Data Block
                     BlockType = BlockType.DATABLOCK;
-                    DataBlock = new DataBlock(blockDataBytes, blockTrailerDataBytes);
+                    DataBlock = new DataBlock(blockDataBytes, blockTrailerDataBytes, encodignType);
                 }
                 else if (bref.ExternalOrInternalBid == ExternalOrInternalBid.Internal)
                 {
