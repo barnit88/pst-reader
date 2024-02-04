@@ -30,10 +30,10 @@ namespace core.LTP.BTreeOnHeap
         /// item that contains the next level index record array.
         /// </summary>
         public UInt32 hidNextLevel { get; set; }
-        public BTHIndex(BTH bTreeOnHeap, int levels)
+        public BTHIndex(HID hid,BTH bTreeOnHeap, int levels)
         {
             this.Level = levels;//Levels
-            this.HidRoot = bTreeOnHeap.BTHHeader.HidRoot;
+            this.HidRoot = hid;
             if (this.HidRoot.hidIndex == 0)
                 return;
             this.BTHIndexEntries = new List<BTHIndexEntry>();
@@ -46,7 +46,7 @@ namespace core.LTP.BTreeOnHeap
                     this.BTHIndexEntries.Add(new BTHIndexEntry(tempBytes, bTreeOnHeap.BTHHeader, i));
                 this.BTHIndexes = new List<BTHIndex>();
                 foreach (var entry in this.BTHIndexEntries)
-                    this.BTHIndexes.Add(new BTHIndex(bTreeOnHeap, this.Level - 1));
+                    this.BTHIndexes.Add(new BTHIndex(entry.HidNextLevel,bTreeOnHeap, this.Level - 1));
             }
         }
     }
