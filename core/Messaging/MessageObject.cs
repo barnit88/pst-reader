@@ -68,7 +68,13 @@ namespace core.Messaging
             this._IPMItem = item;
             this.Data = node;
             this.NID = this.node.NodeID;
-            //this.MessagePC = new PropertyContext(this.Data);
+            this.MessagePC = new PropertyContext(this.Data);
+            var displayName = Encoding.Unicode.GetString(this.MessagePC.Properties[66].Data);
+            //var emailAddress = Encoding.Unicode.GetString(this.MessagePC.Properties[100].Data);
+            var sentRepresentingEmailAddress = Encoding.Unicode.GetString(this.MessagePC.Properties[101].Data);
+            Console.WriteLine(displayName);
+            //Console.WriteLine(emailAddress);
+            Console.WriteLine(sentRepresentingEmailAddress);
             foreach (var subNode in this.Data.SubNodeData)
             {
                 var temp = new Nid(subNode.NodeID);

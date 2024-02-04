@@ -18,7 +18,7 @@ class Program
     {
         var sw = new Stopwatch();
         sw.Start();
-        string path = "C:\\Users\\Dell\\Workstation\\SoftwareDevelopment\\Dotnet\\NugetLibraries\\Personal\\PSTExtractionLibrary\\sample-pst\\source.pst";
+        string path = "C:\\Users\\Dell\\Workstation\\SoftwareDevelopment\\Dotnet\\NugetLibraries\\Personal\\PSTExtractionLibrary\\pst-extract\\pst-extract\\source.pst";
         using (var memoryMappedFile = MemoryMappedFile.CreateFromFile(path, FileMode.Open))
         {
             var pst = new PST(memoryMappedFile);
